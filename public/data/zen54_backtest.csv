@@ -1,0 +1,103 @@
+tipo_registro;mes;descricao;valor;unidade;fonte;qualidade;global_wrld11;cdi_di;ipca_curto_b5p211;ipca_intermediario_proxy;ipca_longo_b5mb11;prefix_fixa11;usd_curto_bshv39;eur_cambio_trendeuro;cripto_hash11;ibov_bova11;zen54_retorno_mensal_proxy;zen54_retorno_mensal_proxy_acumulado;global50_cdi50;global50_cdi50_acumulado;cdi_di_acumulado;ibov_bova11_acumulado;global_wrld11_acumulado;peso_pct;zen54_retorno_mensal_proxy_movel_12m;global50_cdi50_movel_12m;cdi_di_movel_12m;global_wrld11_movel_12m
+RETORNO_MENSAL;2024-01;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.019;0.01;0.007;-0.004;-0.015;0.008;0.012;0.002;0.008;-0.049;0.01275;0.01275;0.0145;0.0145;0.01;-0.049;0.019;;;;;
+RETORNO_MENSAL;2024-02;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.046;0.008;0.006;0.009;0.012;-0.001;0.009;0.006;0.441;0.01;0.0383;0.051538325;0.027;0.0418915;0.01808;-0.03949;0.065874;;;;;
+RETORNO_MENSAL;2024-03;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.045;0.008;0.008;-0.001;-0.01;-0.009;0.012;0.01;0.13;-0.007;0.02773;0.0806974828;0.0265;0.0695016247;0.02622464;-0.04621357;0.11383833;;;;;
+RETORNO_MENSAL;2024-04;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.005;0.009;-0.003;-0.015;-0.027;0.001;0.042;0.028;-0.138;-0.016;-0.00366;0.07674213;0.002;0.071640628;0.0354606618;-0.0614741529;0.1082691383;;;;;
+RETORNO_MENSAL;2024-05;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.054;0.008;0.011;0.0115;0.012;0.004;0.011;0.03;0.18;-0.03;0.035595;0.1150687661;0.031;0.1048614875;0.0437443471;-0.0896299283;0.1681156718;;;;;
+RETORNO_MENSAL;2024-06;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.081;0.008;0.003;-0.0085;-0.02;-0.004;0.068;0.056;-0.045;0.014;0.041325;0.1611489828;0.0445;0.1540278237;0.0520943018;-0.0768847473;0.2627330412;;;;;
+RETORNO_MENSAL;2024-07;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.033;0.009;0.008;0.018;0.028;0.013;0.01;0.024;0.063;0.03;0.02298;0.1878321865;0.021;0.178262408;0.0615631505;-0.0491912897;0.3044032316;;;;;
+RETORNO_MENSAL;2024-08;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.017;0.009;0.005;0.007;0.009;0.005;0.009;0.016;-0.137;0.069;0.00786;0.1971685475;0.013;0.1935798193;0.0711172189;0.0164145113;0.3265780865;;;;;
+RETORNO_MENSAL;2024-09;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.013;0.008;0.005;-0.0045;-0.014;-0.001;-0.032;-0.018;0.027;-0.031;-0.004585;0.1916795297;-0.0025;0.1905958697;0.0796861567;-0.0150943385;0.3093325714;;;;;
+RETORNO_MENSAL;2024-10;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.041;0.009;0.007;-0.0055;-0.018;-0.004;0.061;0.04;0.144;-0.017;0.028445;0.2255768539;0.025;0.2203607665;0.0894033321;-0.0318377348;0.3630152068;;;;;
+RETORNO_MENSAL;2024-11;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.091;0.008;0.003;-0.002;-0.007;-0.017;0.032;0.005;0.47;-0.031;0.05918;0.2981064921;0.0495;0.2807686244;0.0981185587;-0.061850765;0.4870495907;;;;;
+RETORNO_MENSAL;2024-12;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.011;0.009;-0.003;-0.023;-0.043;-0.028;0.041;0.02;0.017;-0.041;-0.00403;0.2928751229;-0.001;0.2794878558;0.1080016257;-0.1003148836;0.4706920452;;0.2928751229;0.2794878558;0.1080016257;0.4706920452
+RETORNO_MENSAL;2025-01;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.028;0.011;0.019;0.013;0.007;0.04;-0.062;-0.053;0.024;0.049;-0.00818;0.2822994044;-0.0085;0.268612209;0.1201896436;-0.0562303129;0.4295126679;;0.2661559165;0.2504802454;0.1090986571;0.4028583591
+RETORNO_MENSAL;2025-02;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.003;0.01;0.007;0.0055;0.004;0.006;0.024;0.009;-0.205;-0.024;-9.5e-05;0.282177586;0.0065;0.2768581884;0.1313915401;-0.0788807854;0.4338012059;;0.2193350974;0.2255193447;0.1112992496;0.3451882736
+RETORNO_MENSAL;2025-03;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.068;0.01;0.004;0.0155;0.027;0.019;-0.028;0.012;-0.08;0.061;-0.030105;0.2435776298;-0.029;0.2398293009;0.1427054555;-0.0226925133;0.3363027239;;0.1507176149;0.1592589223;0.1135042085;0.1997277234
+RETORNO_MENSAL;2025-04;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.002;0.011;0.018;0.021;0.024;0.04;-0.012;0.042;0.109;0.034;0.01235;0.2589358135;0.0065;0.2478881913;0.1552752155;0.0105359412;0.3389753293;;0.1692082797;0.1644651749;0.1157113526;0.208168019
+RETORNO_MENSAL;2025-05;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.064;0.011;0.007;0.0155;0.024;0.005;0.009;0.011;0.113;0.018;0.038605;0.3075370306;0.0375;0.2946839985;0.1679832428;0.0287255881;0.4246697504;;0.1726066323;0.171806614;0.1190319221;0.2196307136
+RETORNO_MENSAL;2025-06;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.006;0.011;0.003;0.0095;0.016;0.02;-0.036;-0.012;-0.022;0.014;-0.000145;0.3073474377;0.0025;0.2979207085;0.1808310585;0.0431277464;0.4161217319;;0.1259084381;0.1246875352;0.1223623742;0.1214735702
+RETORNO_MENSAL;2025-07;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.041;0.013;0.003;-0.0055;-0.014;-0.003;0.029;-0.001;0.183;-0.044;0.028565;0.3446918173;0.027;0.3329645676;0.1961818623;-0.0027698745;0.4741827229;;0.13205538;0.1312968645;0.1268117791;0.1301587479
+RETORNO_MENSAL;2025-08;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.004;0.012;0.011;0.009;0.007;0.02;-0.007;-0.004;-0.06;0.066;0.00154;0.3467626427;0.004;0.3382964259;0.2105360446;0.0630473138;0.468285992;;0.1249565865;0.1212458558;0.1301620619;0.1068221366
+RETORNO_MENSAL;2025-09;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.015;0.012;0.007;0.005;0.003;0.008;-0.043;-0.016;0.013;0.034;0.01014;0.3604188158;0.0135;0.3563634277;0.2250624772;0.0991909225;0.4903102819;;0.1415978726;0.1392307517;0.134646832;0.1382213461
+RETORNO_MENSAL;2025-10;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.031;0.013;0.01;0.0095;0.009;0.016;0.017;-0.003;-0.044;0.022;0.019215;0.3865592634;0.022;0.3862034231;0.2409882894;0.1233731228;0.5365099007;;0.1313523579;0.1358964178;0.1391449364;0.1272874235
+RETORNO_MENSAL;2025-11;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.006;0.011;0.011;0.022;0.033;0.018;-0.008;-0.001;-0.181;0.064;-0.00244;0.3831760588;0.0025;0.3896689316;0.2546391605;0.1952690026;0.5272908413;;0.0655335808;0.0850273072;0.1425352487;0.0270611356
+RETORNO_MENSAL;2025-12;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.038;0.012;0.009;0.003;-0.003;-0.001;0.031;0.041;-0.029;0.014;0.02262;0.4144635012;0.025;0.4244106549;0.2696948305;0.2120027687;0.5853278932;;0.0940449516;0.1132662561;0.1459322811;0.0779468744
+RETORNO_MENSAL;2026-01;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.015;0.012;0.012;0.011;0.01;0.021;-0.043;-0.029;-0.095;0.128;-0.00599;0.4059908649;-0.0015;0.4222740389;0.2849311684;0.3671391231;0.5615479748;;0.0964606706;0.1211259271;0.1470657453;0.0923638593
+RETORNO_MENSAL;2026-02;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.01;0.01;0.012;0.0165;0.021;0.013;-0.023;-0.027;-0.249;0.039;-0.008135;0.3945531292;0.0;0.4222740389;0.2977804801;0.4204575489;0.5459324951;;0.0876442892;0.1138856702;0.1470657453;0.0782056039
+RETORNO_MENSAL;2026-03;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.052;0.012;0.014;0.001;-0.012;-0.011;0.022;-0.009;0.049;-0.005;-0.01885;0.3682658027;-0.02;0.3938285582;0.3133538459;0.4133552611;0.4655440053;;0.1002656931;0.1242100482;0.1493371626;0.0967155713
+RETORNO_MENSAL;2026-04;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.044;0.011;0.013;0.018;0.023;0.007;-0.041;-0.026;0.057;-0.001;0.02604;0.4038954442;0.0275;0.4321588435;0.3278007382;0.4119419059;0.5300279416;;0.1151445762;0.1476659956;0.1493371626;0.1426856851
+RETORNO_MENSAL;2026-05;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.064;0.011;0.009;0.004;-0.001;0.005;0.009;0.014;-0.028;-0.072;0.03379;0.4513330713;0.0375;0.4858648001;0.3424065463;0.3102820886;0.6279497298;;0.1099747367;0.1476659956;0.1493371626;0.1426856851
+RETORNO_MENSAL;2026-06;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.02;0.011;0.0;-0.0105;-0.021;0.006;0.033;-0.008;-0.187;-0.01;0.006935;0.4613980661;0.0155;0.5088957045;0.3571730183;0.2971792678;0.6605087244;;0.1178344975;0.1625484474;0.1493371626;0.1725748479
+RETORNO_MENSAL;2026-07;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.026;0.012;0.012;0.009;0.006;0.007;-0.011;-0.006;0.06;0.035;-0.00593;0.4527319756;-0.007;0.4983334346;0.3734590945;0.3425805421;0.6173354976;;0.080345665;0.1240609623;0.1482025751;0.097106534
+RETORNO_MENSAL;2026-08;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;0.052;0.011;0.014;0.0165;0.019;0.01;0.024;0.031;0.285;-0.001;0.039855;0.5106306085;0.0315;0.5455309378;0.3885671446;0.3412379616;0.7014369435;;0.1216754613;0.1548494847;0.1470679876;0.1587912387
+RETORNO_MENSAL;2026-09;"Retornos em fração decimal; 0.01 = 1%; rebalanceamento mensal";;;;PROXY_PRELIMINAR;-0.018;0.011;0.022;0.0295;0.037;0.023;0.049;-0.017;0.068;0.053;0.002435;0.514308994;-0.0035;0.5401215795;0.4038413832;0.4123235735;0.6708110785;;0.1131197072;0.135478551;0.1459345212;0.1211162526
+PESO_ALVO;;global_wrld11;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;47.0;;;;
+PESO_ALVO;;cdi_di;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;25.0;;;;
+PESO_ALVO;;ipca_curto_b5p211;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;10.0;;;;
+PESO_ALVO;;ipca_intermediario_proxy;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;3.0;;;;
+PESO_ALVO;;ipca_longo_b5mb11;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;2.0;;;;
+PESO_ALVO;;prefix_fixa11;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;5.0;;;;
+PESO_ALVO;;usd_curto_bshv39;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;3.0;;;;
+PESO_ALVO;;eur_cambio_trendeuro;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;2.0;;;;
+PESO_ALVO;;cripto_hash11;;%;;OFICIAL_5_4;;;;;;;;;;;;;;;;;;3.0;;;;
+KPI_PRELIMINAR;;zen54_retorno_mensal_proxy:retorno_acumulado;0.514308994;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;zen54_retorno_mensal_proxy:cagr;0.1628736937;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;zen54_retorno_mensal_proxy:volatilidade_anual;0.0704984897;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;zen54_retorno_mensal_proxy:drawdown_max_fechamento_mensal;-0.042006463;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global50_cdi50:retorno_acumulado;0.5401215795;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global50_cdi50:cagr;0.1700429937;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global50_cdi50:volatilidade_anual;0.0634148051;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global50_cdi50:drawdown_max_fechamento_mensal;-0.0319646521;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;cdi_di:retorno_acumulado;0.4038413832;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;cdi_di:cagr;0.1312802275;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;cdi_di:volatilidade_anual;0.0053851648;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;cdi_di:drawdown_max_fechamento_mensal;0;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;ibov_bova11:retorno_acumulado;0.4123235735;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;ibov_bova11:cagr;0.1337610431;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;ibov_bova11:volatilidade_anual;0.1462553029;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;ibov_bova11:drawdown_max_fechamento_mensal;-0.1148442822;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global_wrld11:retorno_acumulado;0.6708110785;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global_wrld11:cagr;0.2052148926;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global_wrld11:volatilidade_anual;0.1283228351;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;global_wrld11:drawdown_max_fechamento_mensal;-0.1013731268;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;WRLD11;;;https://www.etfsbrasil.com.br/comparador/wrld11;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;B5P211 + CDI DI;;;https://www.etfsbrasil.com.br/etfs/b5p211;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;B5MB11;;;https://www.etfsbrasil.com.br/etfs/b5mb11;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;FIXA11;;;https://www.etfsbrasil.com.br/etfs/fixa11;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;BSHV39;;;https://www.etfsbrasil.com.br/etfs/bshv39;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;TREND EURO;;;https://www.etfsbrasil.com.br/fundos/38597202000135;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;HASH11;;;https://www.etfsbrasil.com.br/etfs/hash11;SECUNDARIA_DADOS_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+FONTE;;BOVA11;;;https://etfsbrasil.com.br/etfs/bova11;SECUNDARIA_DADOS_ARREDONDADOS;;;;;;;;;;;;;;;;;;;;;;
+PERIODO;;"2024-01 a 2026-09; 33 meses completos alinhados";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+METODO;;retornos totais mensais publicados por ETFs Brasil, arredondados a 0,1 ponto percentual;;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+METODO;;"retorno proxy = soma dos pesos-alvo x retorno mensal de cada série; rebalanceamento mensal";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+METODO;;"acumulado = produto(1+retorno_mensal)-1; sem aportes nem saques";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;"Não é backtest definitivo da política Zen 5.4; componentes USD/EUR e IPCA intermediário são aproximações.";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;BSHV39 replica SHV (US Treasury 0-1 ano) e NÃO SGOV 0-3 meses.;;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;"TREND EURO é fundo cambial, NÃO renda fixa curta EUR; retorno de juros em EUR pode estar ausente.";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;FIXA11 utiliza futuro de DI ~3 anos, NÃO carteira de Tesouro Prefixado 2029/2032.;;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;"IPCA intermediário 2032 substituído por mistura 50/50 B5P211 e B5MB11; não reproduz duration 2032.";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;B5P211 utiliza IMA-B 5 P2, não exatamente IMA-B 5 genérico.;;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;"CDI arredondado a 0,1 ponto percentual a partir de coluna DI; substituir por CDI oficial em backtest final.";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;Sem impostos pessoais, spreads, custos de câmbio ou ajustes de contas offshore.;;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;"Taxas internas dos ETFs já estão implícitas nas séries de desempenho publicadas; não descontar novamente.";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;"MUND11 iniciou em 2026; proxy global usa WRLD11 já cotado em reais.";;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+CUIDADO;;Não adicionamos USD/BRL novamente a WRLD11 ou BSHV39, que já estão em BRL.;;;;NOTA_METODOLOGICA;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;zen54_retorno_mensal_proxy:sharpe_excesso_cdi;0.42868746;razao;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+KPI_PRELIMINAR;;zen54_retorno_mensal_proxy:sortino_excesso_cdi;0.70867547;razao;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2024;zen54_retorno_mensal_proxy;0.2928751229;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2024;global50_cdi50;0.2794878558;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2024;cdi_di;0.1080016257;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2024;ibov_bova11;-0.1003148836;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2024;global_wrld11;0.4706920452;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2025;zen54_retorno_mensal_proxy;0.0940449516;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2025;global50_cdi50;0.1132662561;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2025;cdi_di;0.1459322811;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2025;ibov_bova11;0.3471410682;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2025;global_wrld11;0.0779468744;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2026_JAN_SET;zen54_retorno_mensal_proxy;0.0705889496;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2026_JAN_SET;global50_cdi50;0.0812342453;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2026_JAN_SET;cdi_di;0.1056525942;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2026_JAN_SET;ibov_bova11;0.1652808146;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;
+RETORNO_ANUAL;2026_JAN_SET;global_wrld11;0.0539214541;fração_decimal;;CALCULADO_SOBRE_SERIES_ARREDONDADAS;;;;;;;;;;;;;;;;;;;;;;

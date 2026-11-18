@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<!--
+  Folio — Interactive Data Visualization & Dashboard Template
+  WCAG 2.2 AA Contrast Verification across all 7 themes:
+  All 34 colour pairs per theme (text >= 4.5:1, graphics/UI >= 3.0:1) are defined
+  in the theme blocks below (--paper, --paper-raised, --ink, --ink-2, --ink-3,
+  --rule, --band, --white, --violet, --violet-ink, --vermilion, --vermilion-ink,
+  --magenta, --on-violet, --on-vermilion, --on-magenta, --violet-100..600,
+  --vermilion-tint, --violet-tint, --neutral-data).
+  Notes:
+  - -violet, -vermilion and -magenta represent data series A, B and C across themes.
+  - -white represents ink on the header band and on dark heatmap cells (500-600);
+    in Night Edition the band is light amber (#F2B84B), so -white is #121318.
+  - -vermilion-ink is used whenever series-B colour appears as text on paper.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6C50F6">
+  <script>
+    (function () {
+      var ids = ['lavender-press','newsprint','night-edition','gazette-mono','swiss-poster','forest-ochre','riso-pastel'];
+      var t = 'lavender-press';
+      try { var s = localStorage.getItem('folio.theme.v1'); if (ids.indexOf(s) > -1) t = s; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <title>Carteira Zen 5.4 — Estratégia Global Brasileira</title>
+  <meta name="description" content="Dashboard editorial interativo da Carteira Teórica Zen 5.4: alocação global, renda fixa brasileira, reservas em USD/EUR, backtest preliminar e comparação com CDI, Ibovespa e WRLD11.">
+  <meta name="keywords" content="Carteira Zen 5.4, alocação de ativos, investimentos globais, WRLD11, CDI, IPCA+, B5P211, BOVA11, backtest, Sharpe, Sortino, drawdown">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Carteira Zen 5.4">
+  <meta property="og:title" content="Carteira Zen 5.4 — Estratégia Global Brasileira">
+  <meta property="og:description" content="Explore a composição estratégica, retorno acumulado, CAGR, volatilidade, Sharpe, Sortino e comparações históricas da Carteira Teórica Zen 5.4.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Carteira Zen 5.4 — Estratégia Global Brasileira">
+  <meta name="twitter:description" content="Dashboard interativo da Carteira Teórica Zen 5.4 com análise de backtest preliminar (Jan/2024–Set/2026) e comparação com benchmarks.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Carteira Zen 5.4 — Estratégia Global Brasileira",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "description": "Painel interativo de pesquisa e divulgação da Carteira Teórica Zen 5.4 voltada ao investidor brasileiro de longo prazo.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "BRL"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Derived theme-agnostic tokens (--violet/--vermilion/--magenta mean data series A/B/C) */
+      --band-hairline: color-mix(in srgb, var(--white) 45%, transparent);
+      --band-rule: color-mix(in srgb, var(--white) 25%, transparent);
+      --band-progress: color-mix(in srgb, var(--white) 60%, transparent);
+      --grid-line: color-mix(in srgb, var(--violet) 15%, transparent);
+      --scrim: color-mix(in srgb, var(--ink) 38%, transparent);
+      color-scheme: light;
+
+      /* Type families */
+      --font-sans: "Geist", "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      /* Fluid type scale */
+      --t-numeral: clamp(96px, 13vw, 232px);
+      --t-display: clamp(44px, 5.2vw, 84px);
+      --t-h2: clamp(32px, 3.4vw, 54px);
+      --t-kpi: clamp(44px, 4.6vw, 76px);
+      --t-h3: 24px;
+      --t-lede: clamp(18px, 1.5vw, 21px);
+      --t-body: 15px;
+      --t-label: 13px;
+      --t-micro: 11px;
+
+      /* 8pt spacing scale */
+      --s-1: 4px;
+      --s-2: 8px;
+      --s-3: 16px;
+      --s-4: 24px;
+      --s-5: 32px;
+      --s-6: 48px;
+      --s-7: 64px;
+      --s-8: 96px;
+      --s-9: 128px;
+      --s-10: 192px;
+
+      /* Grid */
+      --gutter: 24px;
+      --outer-margin: clamp(20px, 4vw, 64px);
+      --container-max: 1440px;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.2, 0, 0, 1);
+      --ease-in-out: cubic-bezier(0.7, 0, 0.2, 1);
+      --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+      --d-1: 120ms;
+      --d-2: 240ms;
+      --d-3: 600ms;
+      --d-4: 900ms;
+      --d-5: 1200ms;
+    }
+
+    :root[data-theme="night-edition"] {
+      --scrim: color-mix(in srgb, #000000 62%, transparent);
+      color-scheme: dark;
+    }
+
+    /* Curated Theme Blocks (single source of truth for both :root and [data-swatch]) */
+    :root,
+    :root[data-theme="lavender-press"],
+    [data-swatch="lavender-press"] {
+      --paper: #E8E6EF;
+      --paper-raised: #F4F3F8;
+      --ink: #121116;
+      --ink-2: #4A4752;
+      --ink-3: #625F6B;
+      --rule: #B8B4C4;
+      --band: #6C50F6;
+      --white: #FFFFFF;
+      --violet: #7C63FF;
+      --violet-ink: #5A3BE6;
+      --vermilion: #E2492C;
+      --vermilion-ink: #B5321A;
+      --magenta: #C04BD9;
+      --on-violet: #121116;
+      --on-vermilion: #121116;
+      --on-magenta: #121116;
+      --violet-100: #E4DFFC;
+      --violet-200: #C9BEFB;
+      --violet-300: #A797FC;
+      --violet-400: #7C63FF;
+      --violet-500: #5A3BE6;
+      --violet-600: #3A22A8;
+      --vermilion-tint: #F2A391;
+      --violet-tint: #B9ABFB;
+      --neutral-data: #CFCBD9;
+    }
+
+    :root[data-theme="newsprint"],
+    [data-swatch="newsprint"] {
+      --paper: #F0EADB;
+      --paper-raised: #F8F4EA;
+      --ink: #1A1714;
+      --ink-2: #4A4239;
+      --ink-3: #655B4F;
+      --rule: #C9BEA9;
+      --band: #1A1714;
+      --white: #F0EADB;
+      --violet: #2C4F8C;
+      --violet-ink: #2C4F8C;
+      --vermilion: #B23A1E;
+      --vermilion-ink: #9E3219;
+      --magenta: #8C6A1C;
+      --on-violet: #F8F4EA;
+      --on-vermilion: #F8F4EA;
+      --on-magenta: #F8F4EA;
+      --violet-100: #E4E3E0;
+      --violet-200: #C3CAD6;
+      --violet-300: #94A5C0;
+      --violet-400: #6D84AC;
+      --violet-500: #2C4F8C;
+      --violet-600: #1B2F57;
+      --vermilion-tint: #E6AE9C;
+      --violet-tint: #A9B8D2;
+      --neutral-data: #D6CDBB;
+    }
+
+    :root[data-theme="night-edition"],
+    [data-swatch="night-edition"] {
+      --paper: #121318;
+      --paper-raised: #1C1E25;
+      --ink: #ECEAF2;
+      --ink-2: #B9B6C4;
+      --ink-3: #9893A3;
+      --rule: #3A3C47;
+      --band: #F2B84B;
+      --white: #121318;
+      --violet: #8FA2FF;
+      --violet-ink: #A9B6FF;
+      --vermilion: #FF7A59;
+      --vermilion-ink: #FF8F73;
+      --magenta: #E58AF0;
+      --on-violet: #121318;
+      --on-vermilion: #121318;
+      --on-magenta: #121318;
+      --violet-100: #1E2133;
+      --violet-200: #283063;
+      --violet-300: #33408A;
+      --violet-400: #3F52A8;
+      --violet-500: #8FA2FF;
+      --violet-600: #C7D0FF;
+      --vermilion-tint: #6B3A30;
+      --violet-tint: #3B437A;
+      --neutral-data: #3A3C47;
+    }
+
+    :root[data-theme="gazette-mono"],
+    [data-swatch="gazette-mono"] {
+      --paper: #FFFFFF;
+      --paper-raised: #F4F4F4;
+      --ink: #0A0A0A;
+      --ink-2: #3D3D3D;
+      --ink-3: #595959;
+      --rule: #BDBDBD;
+      --band: #0A0A0A;
+      --white: #FFFFFF;
+      --violet: #4A4A4A;
+      --violet-ink: #0A0A0A;
+      --vermilion: #8C8C8C;
+      --vermilion-ink: #4A4A4A;
+      --magenta: #6B6B6B;
+      --on-violet: #FFFFFF;
+      --on-vermilion: #0A0A0A;
+      --on-magenta: #FFFFFF;
+      --violet-100: #F0F0F0;
+      --violet-200: #D6D6D6;
+      --violet-300: #B3B3B3;
+      --violet-400: #8C8C8C;
+      --violet-500: #4A4A4A;
+      --violet-600: #1F1F1F;
+      --vermilion-tint: #CFCFCF;
+      --violet-tint: #A6A6A6;
+      --neutral-data: #E0E0E0;
+    }
+
+    :root[data-theme="swiss-poster"],
+    [data-swatch="swiss-poster"] {
+      --paper: #F3F1EC;
+      --paper-raised: #FBFAF7;
+      --ink: #111111;
+      --ink-2: #3F3F3F;
+      --ink-3: #5E5E5E;
+      --rule: #C4C1BA;
+      --band: #D7141A;
+      --white: #FFFFFF;
+      --violet: #D7141A;
+      --violet-ink: #B5101A;
+      --vermilion: #1E4FD6;
+      --vermilion-ink: #1A44B8;
+      --magenta: #808080;
+      --on-violet: #FFFFFF;
+      --on-vermilion: #FFFFFF;
+      --on-magenta: #111111;
+      --violet-100: #F6E3DF;
+      --violet-200: #F0BDB5;
+      --violet-300: #E88A7F;
+      --violet-400: #E0564C;
+      --violet-500: #C21218;
+      --violet-600: #7E0B10;
+      --vermilion-tint: #B5C6F2;
+      --violet-tint: #EFA49C;
+      --neutral-data: #D9D6CF;
+    }
+
+    :root[data-theme="forest-ochre"],
+    [data-swatch="forest-ochre"] {
+      --paper: #EAE6D6;
+      --paper-raised: #F4F1E6;
+      --ink: #18201A;
+      --ink-2: #3F4A40;
+      --ink-3: #58625A;
+      --rule: #BDB89F;
+      --band: #24432E;
+      --white: #F4F1E6;
+      --violet: #3B7A4B;
+      --violet-ink: #2C6339;
+      --vermilion: #8F5B06;
+      --vermilion-ink: #835406;
+      --magenta: #A5432A;
+      --on-violet: #F4F1E6;
+      --on-vermilion: #F4F1E6;
+      --on-magenta: #F4F1E6;
+      --violet-100: #E3E5D3;
+      --violet-200: #C3D3B6;
+      --violet-300: #9DBB92;
+      --violet-400: #76A06F;
+      --violet-500: #2F6A3F;
+      --violet-600: #1B3F26;
+      --vermilion-tint: #E2C48B;
+      --violet-tint: #A9C6A3;
+      --neutral-data: #D3CDB6;
+    }
+
+    :root[data-theme="riso-pastel"],
+    [data-swatch="riso-pastel"] {
+      --paper: #F7F2E8;
+      --paper-raised: #FDFAF4;
+      --ink: #22203A;
+      --ink-2: #4C4864;
+      --ink-3: #625E7A;
+      --rule: #D9CFE0;
+      --band: #D6246E;
+      --white: #FFFFFF;
+      --violet: #0074BE;
+      --violet-ink: #005E9C;
+      --vermilion: #D6246E;
+      --vermilion-ink: #B01A58;
+      --magenta: #007F78;
+      --on-violet: #FFFFFF;
+      --on-vermilion: #FFFFFF;
+      --on-magenta: #FFFFFF;
+      --violet-100: #EAF1F7;
+      --violet-200: #CFE3F2;
+      --violet-300: #A6CDEB;
+      --violet-400: #6FB0E0;
+      --violet-500: #0067A8;
+      --violet-600: #00446F;
+      --vermilion-tint: #F7B6CF;
+      --violet-tint: #B5D8F2;
+      --neutral-data: #E3DCEB;
+    }
+
+    @media (min-width: 1280px) {
+      :root {
+        --t-body: 16px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      :root {
+        --gutter: 16px;
+        --t-numeral: clamp(72px, 26vw, 120px);
+      }
+    }
+
+    @media (max-width: 479px) {
+      :root {
+        --t-display: clamp(34px, 9.5vw, 44px);
+        --t-h2: clamp(26px, 7.2vw, 32px);
+        --t-kpi: clamp(34px, 9.5vw, 44px);
+      }
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: clip;
+    }
+
+    html.panel-open {
+      overflow: hidden;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 400ms;
+      animation-timing-function: var(--ease-std);
+    }
+
+    html.theme-fading body,
+    html.theme-fading body *:not(svg *):not([style*="transition"]) {
+      transition:
+        background-color 400ms var(--ease-std),
+        color 400ms var(--ease-std),
+        border-color 400ms var(--ease-std),
+        outline-color 400ms var(--ease-std) !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: var(--t-body);
+      line-height: 1.55;
+      font-variant-numeric: lining-nums;
+      overflow-x: clip;
+    }
+
+    /* Typography helpers */
+    .num, table td[data-num], .kpi-num, .band-folio, .pager-link, .tt-val {
+      font-feature-settings: "ss01" 0;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+
+    h1, h2, h3, p, ul, ol, figure, figcaption, blockquote {
+      margin: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--violet-ink);
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: var(--s-2);
+      left: var(--s-3);
+      z-index: 300;
+      background: var(--ink);
+      color: var(--paper);
+      padding: var(--s-2) var(--s-3);
+      font-size: var(--t-label);
+      font-weight: 500;
+      text-decoration: none;
+      transform: translateY(-200%);
+      transition: transform var(--d-1) var(--ease-std);
+    }
+    .skip-link:focus {
+      transform: translateY(0);
+      outline: 2px solid var(--white);
+    }
+
+    /* Logotype */
+    .logotype {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .logotype-brand {
+      font-weight: 600;
+      letter-spacing: -0.045em;
+    }
+    .logotype-rule {
+      display: inline-block;
+      width: 1px;
+      height: 0.8em;
+      margin: 0 var(--s-2);
+      background: currentColor;
+      opacity: 0.85;
+    }
+    .logotype-title {
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+    .logotype-year {
+      font-weight: 400;
+      margin-left: 0.35em;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    .logotype--hero {
+      font-size: 20px;
+      color: var(--ink);
+    }
+    @media (max-width: 639px) {
+      .logotype--hero {
+        font-size: clamp(14.5px, 4.3vw, 20px);
+      }
+    }
+    .logotype--band {
+      font-size: 12px;
+      color: var(--white);
+    }
+    .logotype--footer {
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    /* Header Band */
+    .band {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: var(--band);
+      color: var(--white);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+    }
+    .band-inner {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--outer-margin);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-4);
+      height: 100%;
+    }
+    .band-left {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+      min-width: 0;
+    }
+    .band-folio {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .band-running {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: opacity 160ms var(--ease-std);
+    }
+    .band-running.is-fading {
+      opacity: 0;
+    }
+    .band-logo-wrap {
+      display: none;
+      align-items: center;
+    }
+    @media (min-width: 1280px) {
+      .band-logo-wrap {
+        display: flex;
+      }
+    }
+    .band-right {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+      flex-shrink: 0;
+    }
+    .band :focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 2px;
+    }
+
+    /* Pager */
+    .pager-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    .pager-label {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--white);
+    }
+    .pager-list {
+      position: relative;
+      display: flex;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 24px;
+    }
+    .pager-circle {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--white);
+      z-index: 1;
+      pointer-events: none;
+      transition: transform var(--d-2) var(--ease-std);
+    }
+    .pager-list li {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .pager-link {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      text-decoration: none;
+      transition: color var(--d-2) var(--ease-std);
+    }
+    .pager-link:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .pager-link[aria-current="true"] {
+      color: var(--band);
+    }
+    .pager-link[aria-current="true"]:hover {
+      text-decoration: none;
+    }
+
+    /* Mobile pager */
+    .pager-mobile {
+      display: none;
+      align-items: center;
+      gap: var(--s-1);
+    }
+    .pager-step, .pager-toggle {
+      background: transparent;
+      border: 0;
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      min-width: 24px;
+      min-height: 24px;
+      padding: 0 var(--s-1);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .pager-dropdown {
+      position: fixed;
+      top: 40px;
+      left: 0;
+      right: 0;
+      max-height: calc(100dvh - 40px);
+      overflow-y: auto;
+      background: var(--band);
+      border-top: 1px solid var(--band-rule);
+      padding: var(--s-3) var(--outer-margin);
+      z-index: 199;
+    }
+    .pager-dropdown[hidden] {
+      display: none;
+    }
+    .pager-dropdown ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-1) var(--s-4);
+    }
+    @media (max-width: 479px) {
+      .pager-dropdown ol {
+        grid-template-columns: 1fr;
+      }
+    }
+    .pager-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+      min-height: 32px;
+      color: var(--white);
+      text-decoration: none;
+      font-size: var(--t-label);
+      font-weight: 500;
+    }
+    .pager-dropdown a[aria-current="true"] {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Band Control Panel button & separator */
+    .band-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--band-hairline);
+      flex-shrink: 0;
+    }
+    .band-btn {
+      appearance: none;
+      position: relative;
+      height: 28px;
+      padding: 0 var(--s-2);
+      border: 1px solid var(--band-hairline);
+      border-radius: 0;
+      background: transparent;
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: background-color var(--d-1) var(--ease-std), color var(--d-1) var(--ease-std), border-color var(--d-1) var(--ease-std);
+    }
+    .band-btn:hover,
+    .band-btn:active,
+    .band-btn[aria-expanded="true"] {
+      background: var(--white);
+      color: var(--band);
+      border-color: var(--white);
+    }
+    @media (pointer: coarse) {
+      .band-btn::after {
+        content: "";
+        position: absolute;
+        inset: -8px;
+      }
+    }
+    .band-btn-glyph {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+    }
+    .band-close-x {
+      position: relative;
+      width: 9px;
+      height: 9px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .band-close-x::before,
+    .band-close-x::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 9px;
+      height: 1px;
+      background: currentColor;
+    }
+    .band-close-x::before { transform: rotate(45deg); }
+    .band-close-x::after { transform: rotate(-45deg); }
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .band-right {
+        gap: var(--s-3);
+      }
+      .band--hide-label .pager-label {
+        display: none;
+      }
+      .band--hide-folio #bandFolioRight {
+        display: none;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .pager-desktop, .pager-label, #bandFolioRight, .band-sep {
+        display: none;
+      }
+      .pager-mobile {
+        display: flex;
+      }
+      .band-inner {
+        gap: var(--s-2);
+      }
+      .band-left {
+        gap: var(--s-2);
+      }
+      .band-right {
+        gap: var(--s-2);
+      }
+      .band-btn#themePanelBtn {
+        width: 32px;
+        height: 28px;
+        padding: 0;
+        justify-content: center;
+      }
+      .band-btn-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    }
+    @media (max-width: 399px) {
+      #bandFolioLeft {
+        display: none;
+      }
+    }
+
+    /* Scroll progress line */
+    .scroll-progress {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--band-progress);
+      transform-origin: left center;
+      transform: scaleX(0);
+      pointer-events: none;
+    }
+
+    /* Grid overlay (G shortcut) */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      pointer-events: none;
+      display: none;
+    }
+    .grid-overlay.is-on {
+      display: block;
+    }
+    .grid-overlay-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      height: 100%;
+      padding: 0 var(--outer-margin);
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--gutter);
+    }
+    .grid-overlay-col {
+      border-left: 1px solid var(--grid-line);
+      border-right: 1px solid var(--grid-line);
+      height: 100%;
+    }
+
+    /* Container & Spreads */
+    main {
+      width: 100%;
+    }
+
+    .spread {
+      position: relative;
+      min-height: 100svh;
+      padding-top: var(--s-8);
+      padding-bottom: var(--s-7);
+      border-bottom: 1px solid var(--rule);
+      overflow-x: clip;
+    }
+    #s01 {
+      padding-top: var(--s-7);
+      padding-bottom: var(--s-6);
+    }
+    .spread--compact {
+      min-height: auto;
+    }
+    .spread-container {
+      position: relative;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--outer-margin);
+    }
+    .spread-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gutter);
+      row-gap: var(--s-6);
+      align-items: start;
+    }
+
+    /* Centre Spine on desktop spreads */
+    @media (min-width: 1024px) {
+      .spread--spined .spread-grid::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: calc(-1 * var(--s-6));
+        bottom: calc(-1 * var(--s-6));
+        width: 1px;
+        background: var(--rule);
+        pointer-events: none;
+      }
+      .page-left {
+        grid-column: 1 / 7;
+        padding-right: var(--s-3);
+      }
+      .page-right {
+        grid-column: 7 / 13;
+        padding-left: var(--s-3);
+      }
+      .page-full {
+        grid-column: 1 / 13;
+      }
+    }
+
+    @media (max-width: 1023px) {
+      .page-left, .page-right, .page-full {
+        grid-column: 1 / 13;
+      }
+      .page-headline-first {
+        order: -1;
+      }
+    }
+
+    /* Typographic hierarchy */
+    .kicker {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      color: var(--ink-3);
+      margin-bottom: var(--s-3);
+    }
+
+    .headline-display {
+      font-size: var(--t-display);
+      font-weight: 430;
+      line-height: 1.00;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+      color: var(--ink);
+    }
+
+    .headline-h2 {
+      font-size: var(--t-h2);
+      font-weight: 430;
+      line-height: 1.06;
+      letter-spacing: -0.028em;
+      max-width: 17ch;
+      text-wrap: balance;
+      color: var(--ink);
+    }
+    .headline-h2:focus {
+      outline: none;
+    }
+
+    .line {
+      display: block;
+      overflow: hidden;
+      padding-bottom: 0.09em;
+      margin-bottom: -0.09em;
+    }
+    .line-inner {
+      display: block;
+      transform: translateY(105%);
+      transition: transform var(--d-4) var(--ease-out);
+    }
+    .is-in .line-inner {
+      transform: translateY(0);
+    }
+    .line:nth-child(2) .line-inner {
+      transition-delay: 80ms;
+    }
+    .line:nth-child(3) .line-inner {
+      transition-delay: 160ms;
+    }
+
+    .rule-strong {
+      border: 0;
+      border-top: 1px solid var(--ink);
+      margin: var(--s-5) 0;
+      width: 100%;
+    }
+    .rule-light {
+      border: 0;
+      border-top: 1px solid var(--rule);
+      margin: var(--s-4) 0;
+      width: 100%;
+    }
+
+    .lede {
+      font-size: var(--t-lede);
+      font-weight: 400;
+      line-height: 1.40;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      max-width: 44ch;
+      text-wrap: pretty;
+    }
+
+    .body-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-4);
+      font-size: var(--t-body);
+      line-height: 1.55;
+      color: var(--ink-2);
+      hyphens: manual;
+      text-wrap: pretty;
+    }
+    .body-cols p {
+      max-width: 42ch;
+      margin-bottom: var(--s-3);
+    }
+    .body-cols p:last-child {
+      margin-bottom: 0;
+    }
+    @media (max-width: 767px) {
+      .body-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .body-single {
+      font-size: var(--t-body);
+      line-height: 1.55;
+      color: var(--ink-2);
+      max-width: 42ch;
+      text-wrap: pretty;
+    }
+
+    .h3-sub {
+      font-size: var(--t-h3);
+      font-weight: 500;
+      line-height: 1.20;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+    }
+
+    .micro-upper {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      line-height: 1.30;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    .mono-meta {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--ink-3);
+    }
+
+    /* Controls: Segmented control & chips */
+    .seg-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      padding-top: 1px;
+      padding-left: 1px;
+    }
+    .seg-btn {
+      appearance: none;
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--ink);
+      margin: -1px 0 0 -1px;
+      height: 32px;
+      padding: 0 var(--s-3);
+      font-family: var(--font-sans);
+      font-size: var(--t-label);
+      font-weight: 500;
+      line-height: 1;
+      border-radius: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-1);
+      transition: background-color var(--d-1) var(--ease-std), color var(--d-1) var(--ease-std);
+    }
+    .seg-btn:hover {
+      background: var(--paper-raised);
+    }
+    .seg-btn[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+      position: relative;
+      z-index: 1;
+    }
+    .seg-btn[aria-pressed="true"] .legend-swatch--ink {
+      outline: 1px solid var(--paper);
+    }
+    .seg-btn[aria-pressed="true"] .legend-swatch--hollow {
+      border-color: var(--paper) !important;
+    }
+    @media (pointer: coarse) {
+      .seg-btn {
+        min-height: 44px;
+      }
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-3);
+      margin-bottom: var(--s-4);
+    }
+
+    /* Figure Caption Block */
+    .fig-caption {
+      margin-top: var(--s-4);
+      padding-top: var(--s-3);
+      border-top: 1px solid var(--rule);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--s-3);
+    }
+    .fig-meta {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-1);
+      max-width: 58ch;
+    }
+    .fig-text {
+      font-size: var(--t-label);
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--ink-2);
+    }
+    .fig-table-btn {
+      appearance: none;
+      background: transparent;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      height: 32px;
+      padding: 0 var(--s-3);
+      font-family: var(--font-sans);
+      font-size: var(--t-label);
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      border-radius: 0;
+    }
+    .fig-table-btn:hover {
+      background: var(--paper-raised);
+    }
+    .fig-table-wrap {
+      margin-top: var(--s-3);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+    .fig-table-wrap[hidden] {
+      display: none;
+    }
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+    @media (max-width: 639px) {
+      .data-table thead th,
+      .data-table tbody td,
+      .data-table tfoot td {
+        padding: var(--s-2) var(--s-2);
+      }
+    }
+
+    /* Tables (shared across figure tables, §4.2 and §4.10) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--t-label);
+      line-height: 1.35;
+      color: var(--ink);
+    }
+    .data-table thead th {
+      background: var(--paper-raised);
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      text-align: left;
+      padding: var(--s-2) var(--s-3);
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink-2);
+      white-space: nowrap;
+    }
+    .data-table thead th.is-num {
+      text-align: right;
+    }
+    .data-table tbody td,
+    .data-table tfoot td {
+      padding: var(--s-2) var(--s-3);
+      border-bottom: 1px solid var(--rule);
+      vertical-align: middle;
+    }
+    .data-table tbody tr:hover,
+    .data-table tbody tr:focus-within {
+      background: var(--paper-raised);
+    }
+    .data-table tfoot td {
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      font-weight: 500;
+    }
+    .data-table td.is-num {
+      text-align: right;
+      font-variant-numeric: lining-nums tabular-nums;
+      white-space: nowrap;
+    }
+    .sort-btn {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      padding: var(--s-1) 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-1);
+      min-height: 24px;
+    }
+    .sort-btn:hover {
+      color: var(--ink);
+    }
+    .inline-bar-cell {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--s-2);
+      width: 100%;
+    }
+    .inline-bar-track {
+      width: 56px;
+      height: 4px;
+      background: var(--neutral-data);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .inline-bar-fill {
+      height: 4px;
+      background: var(--violet);
+      display: block;
+    }
+
+    /* Tooltip */
+    #tt {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 500;
+      background: var(--paper-raised);
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      padding: var(--s-2) var(--s-3);
+      max-width: 240px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate3d(0, 4px, 0);
+      transition: opacity var(--d-1) var(--ease-std), transform var(--d-1) var(--ease-std);
+    }
+    #tt.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    #tt[hidden] {
+      display: none;
+    }
+    .tt-cat {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      color: var(--ink-3);
+      margin-bottom: 2px;
+    }
+    .tt-val {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .tt-sub {
+      font-size: var(--t-label);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink-2);
+    }
+
+    /* §4.1 Hero */
+    .hero-masthead {
+      grid-column: 1 / 13;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--s-3);
+      padding-bottom: var(--s-3);
+      border-bottom: 1px solid var(--rule);
+    }
+    .hero-left {
+      grid-column: 1 / 7;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-4);
+    }
+    .hero-right {
+      grid-column: 7 / 13;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 1023px) {
+      .hero-left, .hero-right {
+        grid-column: 1 / 13;
+      }
+    }
+    .hero-kpi-strip {
+      grid-column: 1 / 13;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: var(--s-4);
+    }
+    .kpi-cell {
+      padding: var(--s-4) var(--s-4) var(--s-4) 0;
+      border-right: 1px solid var(--rule);
+      padding-left: var(--s-4);
+    }
+    .kpi-cell:first-child {
+      padding-left: 0;
+    }
+    .kpi-cell:last-child {
+      border-right: 0;
+    }
+    .kpi-num {
+      font-size: var(--t-kpi);
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      display: block;
+      margin-bottom: var(--s-2);
+    }
+    .kpi-cap {
+      font-size: var(--t-label);
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--ink-2);
+      max-width: 24ch;
+    }
+    .kpi-delta {
+      display: block;
+      margin-top: var(--s-1);
+      font-size: var(--t-label);
+      font-weight: 500;
+      color: var(--violet-ink);
+    }
+    @media (max-width: 767px) {
+      .hero-kpi-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .kpi-cell {
+        padding: var(--s-3);
+        border-bottom: 1px solid var(--rule);
+      }
+      .kpi-cell:nth-child(odd) {
+        padding-left: 0;
+      }
+      .kpi-cell:nth-child(even) {
+        border-right: 0;
+      }
+      .kpi-cell:nth-last-child(-n+2) {
+        border-bottom: 0;
+      }
+    }
+    .scroll-cue {
+      grid-column: 1 / 13;
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink-3);
+      margin-top: var(--s-2);
+    }
+
+    /* Hero unit chart */
+    .matrix-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+    .matrix-sq {
+      opacity: 0;
+      transition: transform var(--d-3) var(--ease-in-out), fill var(--d-2) var(--ease-std), opacity var(--d-2) var(--ease-out);
+    }
+    .matrix-svg.is-revealed .matrix-sq {
+      opacity: 1;
+    }
+    .matrix-group-hit {
+      cursor: pointer;
+    }
+    .matrix-group-hit:focus-visible .matrix-group-ring {
+      stroke: var(--violet-ink);
+      stroke-width: 2;
+    }
+
+    /* §4.4 & §4.10 Signature Rotated-Numeral Bars */
+    .spread-04-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--s-6);
+      min-height: 100%;
+    }
+    .limits-lead-stat {
+      padding-bottom: var(--s-5);
+      border-bottom: 1px solid var(--rule);
+    }
+    .limits-lead-num {
+      font-size: var(--t-kpi);
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      display: block;
+      margin: var(--s-2) 0;
+    }
+    .evidence-summary-strip {
+      margin-top: var(--s-6);
+      padding-top: var(--s-5);
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--s-4);
+    }
+    @media (max-width: 639px) {
+      .evidence-summary-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+    .rot-bars-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .rot-bars-stage {
+      position: relative;
+      height: clamp(320px, 50svh, 460px);
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      align-items: end;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .rot-bars-stage--outlook {
+      height: clamp(230px, 38svh, 330px);
+      margin-top: var(--s-6);
+    }
+    .rot-bars-stage--outlook .rot-num-text {
+      font-size: clamp(60px, 8.2vw, 148px);
+    }
+    @media (max-width: 767px) {
+      .rot-bars-stage--outlook .rot-num-text {
+        font-size: clamp(56px, 20vw, 96px);
+      }
+    }
+    .rot-bar-btn {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      position: relative;
+      cursor: pointer;
+      display: block;
+      text-align: left;
+    }
+    .rot-bar-btn:focus-visible {
+      outline: 2px solid var(--violet-ink);
+      outline-offset: -2px;
+    }
+    .rot-bar-fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      transform-origin: bottom center;
+      transform: scaleY(0);
+      transition: transform var(--d-3) var(--ease-in-out);
+    }
+    .rot-bar-clip {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+      clip-path: inset(calc((1 - var(--bar-ratio, 0)) * 100%) 0 0 0);
+      transition: clip-path var(--d-3) var(--ease-in-out);
+    }
+    .rot-num-anchor {
+      position: absolute;
+      left: 4px;
+      bottom: 8px;
+      width: 0;
+      height: 0;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity var(--d-4) var(--ease-out), transform var(--d-4) var(--ease-out);
+    }
+    .is-in .rot-num-anchor {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .rot-num-text {
+      display: inline-block;
+      font-size: var(--t-numeral);
+      font-weight: 400;
+      line-height: 0.78;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+      white-space: nowrap;
+      font-feature-settings: "ss01" 0;
+      font-variant-numeric: lining-nums tabular-nums;
+      transform-origin: 0 0;
+      transform: rotate(-90deg);
+    }
+    .rot-num-text.is-exiting {
+      opacity: 0;
+      transform: rotate(-90deg) translateX(36px);
+      transition: opacity var(--d-2) var(--ease-in-out), transform var(--d-3) var(--ease-in-out);
+    }
+    .rot-num-text.is-entering {
+      opacity: 0;
+      transform: rotate(-90deg) translateX(-36px);
+    }
+    .rot-num-text.is-active {
+      opacity: 1;
+      transform: rotate(-90deg) translateX(0);
+      transition: opacity var(--d-3) var(--ease-out), transform var(--d-3) var(--ease-out);
+    }
+    .rot-bars-labels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      padding-top: var(--s-2);
+    }
+    .rot-bar-label {
+      font-size: var(--t-label);
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--ink);
+      padding-right: var(--s-2);
+    }
+
+    /* §4.5 Timeline */
+    .timeline-detail {
+      margin-top: var(--s-6);
+      padding-top: var(--s-4);
+      border-top: 1px solid var(--ink);
+    }
+    .timeline-detail-date {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--violet-ink);
+      margin-bottom: var(--s-1);
+    }
+    .timeline-detail-title {
+      font-size: var(--t-h3);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+    }
+    .timeline-detail-body {
+      font-size: var(--t-body);
+      line-height: 1.5;
+      color: var(--ink-2);
+      margin-bottom: var(--s-2);
+      max-width: 42ch;
+    }
+    .timeline-detail-why {
+      font-size: var(--t-label);
+      line-height: 1.45;
+      color: var(--ink);
+      max-width: 46ch;
+    }
+    .timeline-axis-wrap {
+      position: relative;
+      margin-top: var(--s-3);
+    }
+    .tl-mobile-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-top: var(--s-2);
+      border-top: 1px solid var(--rule);
+    }
+    .tl-mobile-btn {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+      border-radius: 0;
+      padding: var(--s-2) var(--s-1);
+      display: grid;
+      grid-template-columns: 12px 66px 1fr;
+      align-items: center;
+      gap: var(--s-2);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      color: var(--ink-2);
+      min-height: 40px;
+    }
+    .tl-mobile-btn[aria-pressed="true"] {
+      color: var(--ink);
+      background: var(--paper-raised);
+    }
+    .tl-mobile-sq {
+      width: 10px;
+      height: 10px;
+      background: var(--ink);
+      display: block;
+    }
+    .tl-mobile-btn[aria-pressed="true"] .tl-mobile-sq {
+      background: var(--vermilion);
+    }
+    .tl-mobile-date {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--ink-3);
+    }
+    .tl-mobile-btn[aria-pressed="true"] .tl-mobile-date {
+      color: var(--violet-ink);
+    }
+    .tl-mobile-title {
+      font-size: var(--t-label);
+      font-weight: 500;
+      line-height: 1.3;
+      color: inherit;
+    }
+
+    /* §4.6 Sticky Scrollytelling */
+    .scrolly-steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-4);
+      margin-top: var(--s-4);
+    }
+    .scrolly-step:first-child {
+      border-top-color: transparent;
+    }
+    .scrolly-step:first-child.is-active {
+      border-top-color: var(--ink);
+    }
+    .scrolly-step {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      border-top: 1px solid var(--rule);
+      padding: var(--s-4) 0;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-2);
+      color: var(--ink-3);
+      transition: color var(--d-2) var(--ease-std), border-color var(--d-2) var(--ease-std);
+    }
+    .scrolly-step.is-active {
+      color: var(--ink);
+      border-top-color: var(--ink);
+    }
+    .scrolly-step-title {
+      font-size: var(--t-h3);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: inherit;
+    }
+    .scrolly-step-body {
+      font-size: var(--t-body);
+      line-height: 1.55;
+      color: inherit;
+      max-width: 42ch;
+    }
+    @media (min-width: 1024px) {
+      .scrolly-step {
+        min-height: 44svh;
+        justify-content: flex-start;
+        padding-top: var(--s-5);
+      }
+      .scrolly-sticky {
+        position: sticky;
+        top: 72px;
+      }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) and (min-height: 700px) {
+      .scrolly-grid-mid {
+        display: grid;
+        grid-template-columns: 5fr 7fr;
+        gap: var(--gutter);
+        align-items: start;
+      }
+      .scrolly-step {
+        min-height: 55svh;
+        justify-content: center;
+      }
+      .scrolly-sticky {
+        position: sticky;
+        top: 72px;
+      }
+    }
+    .scrolly-mobile-tabs {
+      display: none;
+      margin-bottom: var(--s-4);
+    }
+    @media (max-width: 767px), ((min-width: 768px) and (max-width: 1023px) and (max-height: 699px)) {
+      .scrolly-mobile-tabs {
+        display: block;
+      }
+      .scrolly-step {
+        display: none;
+      }
+      .scrolly-step.is-active {
+        display: flex;
+        min-height: auto;
+      }
+    }
+    .legend-chip {
+      appearance: none;
+      background: transparent;
+      border: 1px solid var(--ink);
+      padding: 0 var(--s-2);
+      height: 28px;
+      font-family: var(--font-sans);
+      font-size: var(--t-micro);
+      font-weight: 500;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border-radius: 0;
+    }
+    .legend-chip[aria-pressed="false"] {
+      opacity: 0.45;
+      border-color: var(--ink-3);
+    }
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* §4.7 Heatmap */
+    .heatmap-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+    .heatmap-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: separate;
+      border-spacing: 2px;
+    }
+    .heatmap-table th {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      color: var(--ink-2);
+      text-align: center;
+      padding: var(--s-2) var(--s-1);
+      vertical-align: bottom;
+    }
+    .heatmap-table th.hm-sector-col {
+      text-align: left;
+      width: 240px;
+      padding-left: 0;
+    }
+    .heatmap-table th.hm-global-col,
+    .heatmap-table td.hm-global-col {
+      border-left: 1px solid var(--ink);
+      padding-left: 10px;
+    }
+    .hm-row-label {
+      font-size: var(--t-label);
+      font-weight: 500;
+      color: var(--ink);
+      text-align: left;
+      padding: var(--s-1) var(--s-3) var(--s-1) 0;
+      white-space: nowrap;
+      background: var(--paper);
+    }
+    .hm-mobile-cue {
+      display: none;
+      margin-top: var(--s-2);
+    }
+    @media (max-width: 767px) {
+      .heatmap-table {
+        min-width: 540px;
+      }
+      .heatmap-table th.hm-sector-col {
+        position: sticky;
+        left: 0;
+        z-index: 3;
+        background: var(--paper);
+      }
+      .hm-row-label {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+      }
+      .heatmap-table th.hm-sector-col,
+      .hm-row-label {
+        width: 136px;
+        min-width: 132px;
+        max-width: 145px;
+        white-space: normal;
+        font-size: 12px;
+        line-height: 1.25;
+        padding-right: var(--s-2);
+        box-shadow: 1px 0 0 var(--rule);
+      }
+      .hm-mobile-cue {
+        display: block;
+      }
+    }
+    .hm-cell-btn {
+      width: 100%;
+      min-height: 40px;
+      border: 0;
+      font-family: var(--font-sans);
+      font-size: var(--t-label);
+      font-weight: 500;
+      font-variant-numeric: lining-nums tabular-nums;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0;
+      transition: opacity var(--d-1) var(--ease-std);
+    }
+    .hm-cell-btn.is-dim {
+      opacity: 0.35;
+    }
+    .hm-cell-btn.is-below {
+      background: var(--neutral-data) !important;
+      color: var(--ink) !important;
+    }
+    .hm-cell-empty {
+      width: 100%;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--paper-raised);
+      color: var(--ink-3);
+      font-size: var(--t-micro);
+      border: 1px dashed var(--rule);
+    }
+    .hm-ramp {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--s-2);
+      margin-top: var(--s-3);
+    }
+    .hm-ramp-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--t-micro);
+      color: var(--ink-2);
+    }
+    .hm-ramp-box {
+      width: 16px;
+      height: 12px;
+      display: inline-block;
+    }
+
+    /* Sliders & inputs */
+    .range-control {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+      font-size: var(--t-label);
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .range-control input[type="range"] {
+      accent-color: var(--violet-ink);
+      width: 140px;
+      cursor: pointer;
+    }
+    .text-input {
+      height: 32px;
+      padding: 0 var(--s-3);
+      border: 1px solid var(--ink);
+      background: var(--paper-raised);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: var(--t-label);
+      border-radius: 0;
+      min-width: 210px;
+    }
+    @media (max-width: 639px) {
+      .text-input {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+    .check-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--t-label);
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      min-height: 32px;
+    }
+    .check-control input {
+      accent-color: var(--violet-ink);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* §4.8 Waffle + Rotated stat */
+    .waffle-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--s-5);
+      align-items: end;
+      margin-top: var(--s-3);
+    }
+    @media (max-width: 540px) {
+      .waffle-stage {
+        grid-template-columns: 1fr;
+      }
+      .waffle-rot-frame {
+        height: clamp(120px, 32vw, 160px);
+      }
+    }
+    .waffle-stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--s-2);
+      min-width: 140px;
+    }
+    .waffle-rot-frame {
+      position: relative;
+      height: clamp(190px, 26vw, 270px);
+      width: 100%;
+    }
+    .waffle-rot-frame .rot-num-anchor {
+      left: 0;
+      bottom: 8px;
+      width: 0;
+      height: 0;
+      overflow: visible;
+      opacity: 1;
+      transform: none;
+    }
+
+    /* §4.10 Market table sticky wrapper */
+    .market-table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      max-height: 72vh;
+      overflow-y: auto;
+      border-bottom: 1px solid var(--rule);
+    }
+    .market-table-scroll thead th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+    }
+    @media (max-width: 767px) {
+      .market-table-scroll tbody td:first-child,
+      .market-table-scroll thead th:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: var(--paper);
+        max-width: 134px;
+        white-space: normal;
+        line-height: 1.25;
+        box-shadow: 1px 0 0 var(--rule);
+      }
+      .market-table-scroll tbody tr:hover td:first-child,
+      .market-table-scroll tbody tr:focus-within td:first-child {
+        background: var(--paper-raised);
+      }
+      .market-table-scroll thead th:first-child {
+        z-index: 4;
+        background: var(--paper-raised);
+      }
+    }
+    .empty-state {
+      padding: var(--s-6) var(--s-4);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-3);
+      font-size: var(--t-body);
+      color: var(--ink-2);
+    }
+
+    /* Footer / Colophon */
+    .colophon {
+      padding: var(--s-8) 0 var(--s-9);
+    }
+    .colophon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--s-5);
+      padding-top: var(--s-6);
+      border-top: 1px solid var(--ink);
+    }
+    @media (max-width: 1023px) {
+      .colophon-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 639px) {
+      .colophon-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .colophon-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-2);
+      font-size: var(--t-label);
+      line-height: 1.45;
+      color: var(--ink-2);
+    }
+    .colophon-bottom {
+      margin-top: var(--s-6);
+      padding-top: var(--s-4);
+      border-top: 1px solid var(--rule);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-3);
+    }
+    .back-top {
+      font-size: var(--t-label);
+      font-weight: 500;
+      color: var(--violet-ink);
+      text-decoration: none;
+    }
+    .back-top:hover {
+      text-decoration: underline;
+    }
+
+    /* Generic SVG text styling */
+    svg text {
+      font-family: var(--font-sans);
+      fill: var(--ink);
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    svg text.svg-micro {
+      font-size: 11px;
+      font-weight: 500;
+      fill: var(--ink-3);
+    }
+    svg text.svg-label {
+      font-size: 13px;
+      font-weight: 500;
+      fill: var(--ink);
+    }
+
+    /* Theme Sidebar (<dialog id="themePanel">) */
+    dialog.theme-panel {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: 400px;
+      max-width: 100vw;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-left: 1px solid var(--ink);
+      border-radius: 0;
+      background: var(--paper-raised);
+      color: var(--ink);
+      overflow: hidden;
+      transform: translateX(100%);
+      transition: transform 220ms var(--ease-in-out);
+    }
+    dialog.theme-panel.is-open {
+      transform: translateX(0);
+      transition-duration: 320ms;
+      transition-timing-function: var(--ease-out);
+    }
+    dialog.theme-panel::backdrop {
+      background: var(--scrim);
+      opacity: 0;
+      transition: opacity 220ms var(--ease-in-out);
+    }
+    dialog.theme-panel.is-open::backdrop {
+      opacity: 1;
+      transition-duration: 320ms;
+      transition-timing-function: var(--ease-out);
+    }
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      dialog.theme-panel { width: 380px; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      dialog.theme-panel { width: 360px; }
+    }
+    @media (max-width: 767px) {
+      dialog.theme-panel {
+        width: 100vw;
+        border-left: 0;
+      }
+    }
+    .theme-panel-inner {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+    .theme-panel-band {
+      height: 40px;
+      flex-shrink: 0;
+      background: var(--band);
+      color: var(--white);
+      padding: 0 var(--s-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-3);
+    }
+    .theme-panel-band :focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 2px;
+    }
+    .theme-panel-band-left {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      min-width: 0;
+    }
+    .theme-panel-band-left h2 {
+      font-size: var(--t-micro);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      color: var(--white);
+    }
+    .theme-panel-body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: var(--s-4);
+    }
+    .theme-panel-lede {
+      font-size: var(--t-label);
+      line-height: 1.45;
+      color: var(--ink-2);
+      margin-top: var(--s-1);
+      margin-bottom: var(--s-4);
+    }
+    .theme-list {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      border-top: 1px solid var(--rule);
+    }
+    .theme-opt {
+      display: block;
+      position: relative;
+      margin: 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .theme-radio {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .theme-opt-body {
+      display: grid;
+      grid-template-columns: 88px 1fr 16px;
+      gap: var(--s-3);
+      align-items: center;
+      padding: var(--s-3) var(--s-1);
+      cursor: pointer;
+    }
+    .theme-opt:hover .theme-opt-name {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .theme-radio:focus-visible + .theme-opt-body {
+      outline: 2px solid var(--violet-ink);
+      outline-offset: 4px;
+    }
+    .theme-opt-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .theme-opt-name {
+      font-size: var(--t-body);
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .theme-opt-desc {
+      font-size: var(--t-label);
+      line-height: 1.4;
+      color: var(--ink-2);
+    }
+    .theme-opt-mark {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--ink-3);
+      background: transparent;
+      justify-self: end;
+    }
+    .theme-radio:checked + .theme-opt-body .theme-opt-mark {
+      border-color: var(--ink);
+      background: var(--ink);
+    }
+    .theme-radio:checked + .theme-opt-body .theme-opt-name {
+      font-weight: 600;
+    }
+    .theme-radio:checked + .theme-opt-body .theme-swatch {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    /* CSS-drawn 88x60 theme swatch card */
+    .theme-swatch {
+      width: 88px;
+      height: 60px;
+      display: grid;
+      grid-template-rows: 10px 1fr 8px;
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .sw-band {
+      background: var(--band);
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+    }
+    .sw-band::before {
+      content: "";
+      width: 30%;
+      height: 2px;
+      background: var(--white);
+      display: block;
+    }
+    .sw-mid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      padding: 6px 6px 0;
+      gap: 6px;
+    }
+    .sw-line {
+      align-self: start;
+      margin-top: 2px;
+      width: 75%;
+      height: 3px;
+      background: var(--ink);
+    }
+    .sw-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 100%;
+    }
+    .sw-bars i {
+      display: block;
+      width: 8px;
+      font-style: normal;
+    }
+    .sw-bars i:nth-child(1) { height: 70%; background: var(--violet); }
+    .sw-bars i:nth-child(2) { height: 48%; background: var(--vermilion); }
+    .sw-bars i:nth-child(3) { height: 30%; background: var(--magenta); }
+    .sw-ramp {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      height: 8px;
+    }
+    .sw-ramp i { display: block; font-style: normal; }
+    .sw-ramp i:nth-child(1) { background: var(--violet-100); }
+    .sw-ramp i:nth-child(2) { background: var(--violet-200); }
+    .sw-ramp i:nth-child(3) { background: var(--violet-300); }
+    .sw-ramp i:nth-child(4) { background: var(--violet-400); }
+    .sw-ramp i:nth-child(5) { background: var(--violet-500); }
+    .sw-ramp i:nth-child(6) { background: var(--violet-600); }
+
+    .theme-panel-footer {
+      flex-shrink: 0;
+      border-top: 1px solid var(--ink);
+      padding: var(--s-3) var(--s-4);
+      background: var(--paper-raised);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-3);
+    }
+    .panel-data-box {
+      margin-top: var(--s-5);
+      padding-top: var(--s-4);
+      border-top: 1px solid var(--ink);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-2);
+    }
+    .panel-data-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-2);
+      margin-top: var(--s-1);
+    }
+    .zen-list {
+      margin: var(--s-3) 0 0;
+      padding-left: 18px;
+      font-size: var(--t-label);
+      line-height: 1.5;
+      color: var(--ink-2);
+    }
+    .zen-list li {
+      margin-bottom: var(--s-2);
+    }
+    .zen-list strong {
+      color: var(--ink);
+    }
+    .colophon-list {
+      margin: 0;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: var(--t-micro);
+      line-height: 1.45;
+      color: var(--ink-2);
+    }
+    .colophon-code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--paper-raised);
+      border: 1px solid var(--rule);
+      padding: 1px 5px;
+      color: var(--ink);
+    }
+    .seg-btn[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-color: var(--ink-3);
+      color: var(--ink-3);
+    }
+    .seg-btn[disabled]:hover {
+      background: transparent;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation-duration: 0ms !important;
+      }
+      dialog.theme-panel,
+      dialog.theme-panel::backdrop {
+        transform: none !important;
+        transition-property: opacity !important;
+        transition-duration: var(--d-1) !important;
+      }
+      dialog.theme-panel:not(.is-open) {
+        opacity: 0;
+      }
+      dialog.theme-panel.is-open {
+        opacity: 1;
+      }
+      .line-inner {
+        transform: translateY(0) !important;
+        transition: none !important;
+      }
+      .rot-bar-fill,
+      .rot-num-anchor,
+      .rot-num-text,
+      .matrix-sq,
+      .pager-circle,
+      .band-running {
+        transition-duration: 120ms !important;
+      }
+      .rot-num-anchor {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .matrix-sq {
+        opacity: 1 !important;
+      }
+      .rot-bar-fill {
+        transition: transform 120ms linear !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+
+  <header class="band" role="banner">
+    <div class="band-inner">
+      <div class="band-left">
+        <span class="band-folio num" id="bandFolioLeft">002</span>
+        <span class="band-running" id="bandTitle">Visão Geral</span>
+      </div>
+      <div class="band-logo-wrap" aria-hidden="true">
+        <span class="logotype logotype--band">
+          <span class="logotype-brand">zen</span><span class="logotype-rule"></span><span class="logotype-title">Carteira Teórica</span><span class="logotype-year">5.4</span>
+        </span>
+      </div>
+      <div class="band-right">
+        <nav class="pager-nav" aria-label="Seções" aria-keyshortcuts="j k 1 2 3 4 5 6 7 8 9 0 g Escape">
+          <span class="pager-label">Seção</span>
+          <ol class="pager-list pager-desktop" id="pagerList">
+            <span class="pager-circle" id="pagerCircle" aria-hidden="true"></span>
+            <li><a class="pager-link" href="#s01" data-sec="0" aria-label="Seção 1: Visão Geral" aria-current="true">01</a></li>
+            <li><a class="pager-link" href="#s02" data-sec="1" aria-label="Seção 2: Composição">02</a></li>
+            <li><a class="pager-link" href="#s03" data-sec="2" aria-label="Seção 3: Anual 2024 vs 2025">03</a></li>
+            <li><a class="pager-link" href="#s04" data-sec="3" aria-label="Seção 4: Janelas KPI">04</a></li>
+            <li><a class="pager-link" href="#s05" data-sec="4" aria-label="Seção 5: Evolução">05</a></li>
+            <li><a class="pager-link" href="#s06" data-sec="5" aria-label="Seção 6: Contribuição">06</a></li>
+            <li><a class="pager-link" href="#s07" data-sec="6" aria-label="Seção 7: Matriz Mensal">07</a></li>
+            <li><a class="pager-link" href="#s08" data-sec="7" aria-label="Seção 8: Consistência">08</a></li>
+            <li><a class="pager-link" href="#s09" data-sec="8" aria-label="Seção 9: Beta e Dispersão">09</a></li>
+            <li><a class="pager-link" href="#s10" data-sec="9" aria-label="Seção 10: Série e CSV">10</a></li>
+          </ol>
+          <div class="pager-mobile">
+            <button type="button" class="pager-step" id="pagerPrev" aria-label="Seção anterior">←</button>
+            <button type="button" class="pager-toggle" id="pagerToggle" aria-expanded="false" aria-controls="pagerMenu">
+              Seção <span class="num" id="pagerMobileNum">01</span> / 10
+            </button>
+            <button type="button" class="pager-step" id="pagerNext" aria-label="Próxima seção">→</button>
+          </div>
+        </nav>
+        <span class="band-folio num" id="bandFolioRight">003</span>
+        <span class="band-sep" aria-hidden="true"></span>
+        <button type="button" class="band-btn" id="themePanelBtn" aria-expanded="false" aria-controls="themePanel" aria-haspopup="dialog">
+          <span class="band-btn-glyph" aria-hidden="true"></span>
+          <span class="band-btn-label">Painel</span>
+        </button>
+      </div>
+    </div>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  </header>
+
+  <div class="pager-dropdown" id="pagerMenu" hidden>
+    <ol id="pagerDropdownList"></ol>
+  </div>
+
+  <div class="grid-overlay" id="gridOverlay" aria-hidden="true">
+    <div class="grid-overlay-inner">
+      <div class="grid-overlay-col"></div><div class="grid-overlay-col"></div>
+      <div class="grid-overlay-col"></div><div class="grid-overlay-col"></div>
+      <div class="grid-overlay-col"></div><div class="grid-overlay-col"></div>
+      <div class="grid-overlay-col"></div><div class="grid-overlay-col"></div>
+      <div class="grid-overlay-col"></div><div class="grid-overlay-col"></div>
+      <div class="grid-overlay-col"></div><div class="grid-overlay-col"></div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- SEÇÃO 01: VISÃO GERAL (HERO) -->
+    <section class="spread" id="s01" aria-labelledby="h01" data-sec-index="0" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="hero-masthead">
+            <span class="logotype logotype--hero">
+              <span class="logotype-brand">zen</span><span class="logotype-rule"></span><span class="logotype-title">Carteira Teórica</span><span class="logotype-year">5.4</span>
+            </span>
+            <span class="micro-upper" id="heroMetaTag" style="color:var(--ink-3);">Backtest Preliminar (Proxy) · Jan/2024–Set/2026 (33 meses) · 9 Instrumentos · Rebalanceamento Mensal</span>
+          </div>
+
+          <div class="hero-left">
+            <div>
+              <p class="kicker">01 — Visão geral da estratégia</p>
+              <h1 class="headline-display" id="h01" tabindex="-1">
+                <span class="line"><span class="line-inner">Diversificação global</span></span>
+                <span class="line"><span class="line-inner">pensada para o</span></span>
+                <span class="line"><span class="line-inner">investidor brasileiro.</span></span>
+              </h1>
+            </div>
+            <hr class="rule-strong" style="margin:0;">
+            <p class="lede">
+              A Carteira Zen 5.4 combina simplicidade operacional, participação no crescimento econômico mundial e proteção contra a inflação brasileira em apenas 9 instrumentos. Construída para quem vive em reais mas consome, viaja e planeja patrimônio também em dólar e euro, sem girar a carteira no curto prazo.
+            </p>
+          </div>
+
+          <div class="hero-right">
+            <div class="controls-row">
+              <span class="h3-sub" style="font-size:15px;">Matriz de alocação: cada quadrado representa 1 % da carteira</span>
+              <div class="seg-group" role="group" aria-label="Agrupar 100 % da carteira por">
+                <button type="button" class="seg-btn" data-matrix-mode="all" aria-pressed="true">100 %</button>
+                <button type="button" class="seg-btn" data-matrix-mode="macro" aria-pressed="false">Macroclasse</button>
+                <button type="button" class="seg-btn" data-matrix-mode="currency" aria-pressed="false">Exposição Cambial</button>
+                <button type="button" class="seg-btn" data-matrix-mode="assets" aria-pressed="false">9 Ativos</button>
+              </div>
+            </div>
+            <div id="chart01"></div>
+            <div id="cap01"></div>
+          </div>
+
+          <div class="hero-kpi-strip" id="heroKpiStrip" aria-label="Indicadores preliminares da Carteira Zen 5.4">
+            <div class="kpi-cell">
+              <span class="kpi-num num" id="kpiCumVal">+51,4%</span>
+              <span class="kpi-cap" id="kpiCumCap">retorno acumulado Zen 5.4 (proxy) em 33 meses alinhados</span>
+              <span class="kpi-delta num" id="kpiCumDelta">↑ +11,0 pp acima do CDI</span>
+            </div>
+            <div class="kpi-cell">
+              <span class="kpi-num num" id="kpiCagrVal">16,3%</span>
+              <span class="kpi-cap" id="kpiCagrCap">CAGR anualizado com volatilidade anual de 7,05 %</span>
+              <span class="kpi-delta num" id="kpiVolDelta">Volatilidade 52 % menor que o Ibov</span>
+            </div>
+            <div class="kpi-cell">
+              <span class="kpi-num num" id="kpiDdVal">−4,2%</span>
+              <span class="kpi-cap" id="kpiDdCap">drawdown máximo em fechamento mensal (recuperado em 6 meses)</span>
+              <span class="kpi-delta num" id="kpiDdDelta">Ibovespa caiu −11,5 % no período</span>
+            </div>
+            <div class="kpi-cell">
+              <span class="kpi-num num" id="kpiSortinoVal">0,71</span>
+              <span class="kpi-cap" id="kpiSortinoCap">índice de Sortino sobre excesso do CDI (Sharpe: 0,43)</span>
+              <span class="kpi-delta num" id="kpiSharpeDelta">Assimetria favorável contra quedas</span>
+            </div>
+          </div>
+
+          <p class="scroll-cue">Role a página ou use as teclas J / K para explorar os 10 painéis analíticos ↓</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 02: COMPOSIÇÃO ESTRATÉGICA E PLACAR DE BENCHMARKS -->
+    <section class="spread spread--spined" id="s02" aria-labelledby="h02" data-sec-index="1" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left">
+            <h3 class="h3-sub" style="margin-bottom:var(--s-3);">Distribuição oficial 5.4 por macroclasse (100 %)</h3>
+            <div id="chart02a"></div>
+            <div id="cap02a"></div>
+
+            <h3 class="h3-sub" style="margin-top:var(--s-6);margin-bottom:var(--s-3);">Placar comparativo: Zen 5.4 vs. Benchmarks</h3>
+            <div id="chart02b"></div>
+            <div id="cap02b"></div>
+          </div>
+
+          <div class="page-right page-headline-first">
+            <p class="kicker">02 — Arquitetura e princípios</p>
+            <h2 class="headline-h2" id="h02" tabindex="-1">
+              <span class="line"><span class="line-inner">Quatro blocos, nove</span></span>
+              <span class="line"><span class="line-inner">ativos e sete princípios</span></span>
+              <span class="line"><span class="line-inner">de longo prazo.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="body-cols">
+              <div>
+                <p>A <strong>exposição global (47 %)</strong> é o motor de crescimento via VT, WRLD11 ou MUND11 — capturando empresas de dezenas de países e setores já com efeito cambial embutido quando cotada em reais.</p>
+                <p>A <strong>renda fixa Brasil (45 %)</strong> equilibra três regimes econômicos: 25 % em CDI, 15 % em títulos IPCA+ (10 % curto, 3 % intermediário, 2 % longo) e 5 % em prefixados.</p>
+                <p>As <strong>reservas internacionais (5 %)</strong> ficam em USD curto (3 %) e EUR (2 %) para despesas futuras no exterior, enquanto <strong>3 % em HASH11</strong> oferecem assimetria controlada em criptoativos.</p>
+              </div>
+              <div>
+                <ol class="zen-list" style="margin-top:0;">
+                  <li><strong>Diversificação global:</strong> núcleo em ETF global amplo.</li>
+                  <li><strong>Adaptação ao Brasil:</strong> CDI, IPCA+ e prefixados na RF.</li>
+                  <li><strong>Diversificação cambial:</strong> exposição indireta + caixa USD/EUR.</li>
+                  <li><strong>Simplicidade:</strong> poucos instrumentos, fáceis de acompanhar.</li>
+                  <li><strong>Longo prazo:</strong> acumulação sem giros especulativos.</li>
+                  <li><strong>Controle de risco:</strong> combinação de ativos descorrelacionados.</li>
+                  <li><strong>Aprimoramento contínuo:</strong> política viva em pesquisa e teste.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 03: DUMBBELL ANUAL (2024 vs 2025) -->
+    <section class="spread spread--spined" id="s03" aria-labelledby="h03" data-sec-index="2" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left">
+            <p class="kicker">03 — Rotação de regimes (2024 vs. 2025)</p>
+            <h2 class="headline-h2" id="h03" tabindex="-1">
+              <span class="line"><span class="line-inner">De um ano global</span></span>
+              <span class="line"><span class="line-inner">para um ano local:</span></span>
+              <span class="line"><span class="line-inner">o efeito da proteção.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="body-cols">
+              <div>
+                <p>O gráfico de halteres compara o retorno anual fechado de <strong>2024</strong> (círculo vazado) contra <strong>2025</strong> (ponto preenchido) para carteiras e componentes-chave.</p>
+                <p>Em 2024, o Ibovespa recuou <strong>−10,0 %</strong> enquanto ações globais em BRL saltaram <strong>+47,1 %</strong>. Já em 2025, os papéis se inverteram: o Ibovespa disparou <strong>+34,7 %</strong> e o WRLD11 desacelerou para <strong>+7,8 %</strong>.</p>
+              </div>
+              <div>
+                <p>Em ambos os cenários extremos, a <strong>Zen 5.4</strong> entregou anos positivos (<strong>+29,3 %</strong> em 2024 e <strong>+9,4 %</strong> em 2025), amortecendo a reversão cambial de 2025 graças aos 45 % de renda fixa brasileira.</p>
+                <p>Ordene os itens ao lado por resultado de 2025, de 2024 ou pela amplitude da virada entre os dois anos.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-right">
+            <div class="controls-row">
+              <span class="h3-sub" style="font-size:15px;">Retorno anual (%) em 2024 vs. 2025 por estratégia e classe</span>
+              <div class="seg-group" role="group" aria-label="Ordenar comparativo anual por">
+                <button type="button" class="seg-btn" data-dumb-sort="y2025" aria-pressed="true">Por 2025</button>
+                <button type="button" class="seg-btn" data-dumb-sort="delta" aria-pressed="false">Por virada</button>
+                <button type="button" class="seg-btn" data-dumb-sort="y2024" aria-pressed="false">Por 2024</button>
+              </div>
+            </div>
+            <div id="chart03"></div>
+            <div id="cap03"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 04: BARRAS KPI FILTRÁVEIS POR JANELA -->
+    <section class="spread spread--spined" id="s04" aria-labelledby="h04" data-sec-index="3" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left spread-04-left">
+            <div class="limits-lead-stat" id="limitsLeadStat">
+              <span class="micro-upper" id="limitsLeadKicker">Zen 5.4 vs. Benchmarks · Período Total (33 meses)</span>
+              <span class="limits-lead-num num" id="limitsLeadNum">+51,4%</span>
+              <p class="lede" id="limitsLeadCap" style="max-width:34ch;">na Zen 5.4 no período completo, contra +54,0 % da carteira 50/50 e +40,4 % do CDI.</p>
+            </div>
+            <div>
+              <hr class="rule-strong" style="margin-top:0;">
+              <div class="body-cols">
+                <div>
+                  <p>Alterne as janelas temporais para comparar lado a lado a <strong>Zen 5.4</strong>, a referência simples <strong>Global 50% / CDI 50%</strong> e o <strong>CDI acumulado</strong> em cada recorte do backtest.</p>
+                  <p>Enquanto a carteira 50/50 depende exclusivamente de dois blocos, a Zen 5.4 incorpora reservas diretas em USD e EUR, títulos IPCA+ e prefixados — mantendo retorno próximo com objetivo explícito de proteção de despesas externas.</p>
+                </div>
+                <div>
+                  <p>Use as setas Esquerda/Direita sobre as barras para inspecionar os valores exatos e a diferença em pontos percentuais em relação ao CDI.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-right page-headline-first">
+            <p class="kicker">04 — Comparativo por janela temporal</p>
+            <h2 class="headline-h2" id="h04" tabindex="-1">
+              <span class="line"><span class="line-inner">Retorno comparado</span></span>
+              <span class="line"><span class="line-inner">em cinco recortes</span></span>
+              <span class="line"><span class="line-inner">históricos.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="controls-row">
+              <div class="seg-group" id="windowFilterGroup" role="group" aria-label="Filtrar comparativo por janela">
+                <button type="button" class="seg-btn" data-limit-region="total" aria-pressed="true">Total (33m)</button>
+                <button type="button" class="seg-btn" data-limit-region="y2024" aria-pressed="false">2024</button>
+                <button type="button" class="seg-btn" data-limit-region="y2025" aria-pressed="false">2025</button>
+                <button type="button" class="seg-btn" data-limit-region="y2026" aria-pressed="false">2026 (Jan–Set)</button>
+                <button type="button" class="seg-btn" data-limit-region="l12m" aria-pressed="false">Últimos 12M</button>
+              </div>
+            </div>
+            <p class="sr-only" id="limitsLive" aria-live="polite"></p>
+            <div id="chart04"></div>
+            <div id="cap04"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 05: EVOLUÇÃO HISTÓRICA & MARCOS -->
+    <section class="spread spread--spined" id="s05" aria-labelledby="h05" data-sec-index="4" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left">
+            <p class="kicker">05 — Trajetória acumulada e marcos</p>
+            <h2 class="headline-h2" id="h05" tabindex="-1">
+              <span class="line"><span class="line-inner">Curva patrimonial</span></span>
+              <span class="line"><span class="line-inner">suave com recuperação</span></span>
+              <span class="line"><span class="line-inner">rápida nas quedas.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="body-cols">
+              <div>
+                <p>A curva contínua acompanha o retorno acumulado real mês a mês da <strong>Zen 5.4</strong> (linha principal), comparada às trajetórias de <strong>CDI</strong> e <strong>Ibovespa (BOVA11)</strong> desde janeiro de 2024.</p>
+                <p>Observe como o pior recuo mensal acumulado ocorreu entre novembro de 2024 e março de 2025 (<strong>−4,20 %</strong>), com recuperação integral do topo já em maio/julho de 2025.</p>
+              </div>
+              <div>
+                <p>Clique em qualquer marcador na linha do tempo abaixo do gráfico — ou navegue com as setas do teclado — para inspecionar os eventos marcantes de cada fase do backtest.</p>
+              </div>
+            </div>
+
+            <div class="timeline-detail" id="timelineDetail" aria-live="polite"></div>
+          </div>
+
+          <div class="page-right">
+            <h3 class="h3-sub" style="font-size:15px;margin-bottom:var(--s-3);">Retorno acumulado (%) mês a mês: Zen 5.4 vs. CDI e Ibovespa</h3>
+            <div id="chart05a"></div>
+            <div id="chart05b" class="timeline-axis-wrap"></div>
+            <div id="cap05"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 06: SCROLLYTELLING CONTRIBUIÇÃO POR MACROCLASSE -->
+    <section class="spread spread--spined" id="s06" aria-labelledby="h06" data-sec-index="5" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid scrolly-grid-mid">
+          <div class="page-left">
+            <p class="kicker">06 — Anatomia do retorno anual</p>
+            <h2 class="headline-h2" id="h06" tabindex="-1">
+              <span class="line"><span class="line-inner">Quem puxou a carteira</span></span>
+              <span class="line"><span class="line-inner">em cada ciclo de</span></span>
+              <span class="line"><span class="line-inner">juros e câmbio.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <p class="body-single">Decomposição aproximada da contribuição por macroclasse em cada período (soma ponderada dos retornos mensais de cada bloco da Zen 5.4).</p>
+
+            <div class="scrolly-mobile-tabs">
+              <div class="seg-group" role="group" aria-label="Etapas da análise anual">
+                <button type="button" class="seg-btn" data-step-tab="0" aria-pressed="true">Motor Global</button>
+                <button type="button" class="seg-btn" data-step-tab="1" aria-pressed="false">Amortecedor RF</button>
+                <button type="button" class="seg-btn" data-step-tab="2" aria-pressed="false">Visão Completa</button>
+              </div>
+            </div>
+
+            <div class="scrolly-steps" id="scrollySteps">
+              <button type="button" class="scrolly-step is-active" data-step="0" aria-pressed="true">
+                <span class="micro-upper">Etapa 01 · Foco em Ações Globais (47 %)</span>
+                <span class="scrolly-step-title">2024: crescimento internacional na liderança</span>
+                <span class="scrolly-step-body">Em 2024, a parcela de 47 % em ações globais (WRLD11) foi o principal motor de retorno, somando mais de 18 pp brutos ao resultado do ano e capturando a valorização global somada ao câmbio.</span>
+              </button>
+              <button type="button" class="scrolly-step" data-step="1" aria-pressed="false">
+                <span class="micro-upper">Etapa 02 · Foco em Renda Fixa Brasil (45 %)</span>
+                <span class="scrolly-step-title">2025–2026: o carrego brasileiro sustenta</span>
+                <span class="scrolly-step-body">Quando ações globais e reservas cambiais desaceleram em reais em 2025 e 2026, a renda fixa local (CDI, IPCA+ e prefixados) assume o protagonismo e preserva o ganho positivo da carteira.</span>
+              </button>
+              <button type="button" class="scrolly-step" data-step="2" aria-pressed="false">
+                <span class="micro-upper">Etapa 03 · Todas as 4 macroclasses juntas</span>
+                <span class="scrolly-step-title">Equilíbrio estrutural nos 33 meses</span>
+                <span class="scrolly-step-body">Ative ou desative qualquer bloco nos botões acima do gráfico e alterne entre contribuição bruta (p.p.) e participação proporcional para testar o peso de cada motor na estratégia.</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="page-right">
+            <div class="scrolly-sticky">
+              <div class="controls-row">
+                <div id="volumeLegend" class="seg-group" style="gap:6px;" role="group" aria-label="Alternar macroclasses"></div>
+                <div class="seg-group" role="group" aria-label="Modo de exibição das colunas">
+                  <button type="button" class="seg-btn" data-vol-mode="abs" aria-pressed="true">Contribuição (pp)</button>
+                  <button type="button" class="seg-btn" data-vol-mode="share" aria-pressed="false">Participação (%)</button>
+                </div>
+              </div>
+              <div id="chart06"></div>
+              <div id="cap06"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 07: HEATMAP MENSAL CALENDÁRIO -->
+    <section class="spread" id="s07" aria-labelledby="h07" data-sec-index="6" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-full">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--s-6);align-items:end;">
+              <div>
+                <p class="kicker">07 — Matriz mensal de retornos</p>
+                <h2 class="headline-h2" id="h07" tabindex="-1">
+                  <span class="line"><span class="line-inner">Rentabilidade mês</span></span>
+                  <span class="line"><span class="line-inner">a mês no formato</span></span>
+                  <span class="line"><span class="line-inner">lâmina de fundo.</span></span>
+                </h2>
+              </div>
+              <div class="body-cols">
+                <div>
+                  <p>Compare todos os meses do backtest (Jan/2024 a Set/2026) lado a lado com o fechamento composto de cada ano. Alterne entre a <strong>Zen 5.4</strong> e os benchmarks para enxergar onde cada estratégia oscilou mais.</p>
+                </div>
+                <div>
+                  <p>Use o controle deslizante abaixo para filtrar apenas meses acima de um patamar mínimo de retorno, ou navegue pelas células com as setas do teclado.</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="rule-strong">
+
+            <div class="controls-row">
+              <div class="seg-group" id="hmSeriesFilters" role="group" aria-label="Selecionar série da matriz mensal">
+                <button type="button" class="seg-btn" data-hm-series="zen54" aria-pressed="true">Zen 5.4</button>
+                <button type="button" class="seg-btn" data-hm-series="global50" aria-pressed="false">Global 50/50</button>
+                <button type="button" class="seg-btn" data-hm-series="wrld11" aria-pressed="false">WRLD11</button>
+                <button type="button" class="seg-btn" data-hm-series="ibov" aria-pressed="false">Ibovespa</button>
+                <button type="button" class="seg-btn" data-hm-series="cdi" aria-pressed="false">CDI</button>
+              </div>
+              <label class="range-control" for="hmThreshold">
+                <span>Destacar meses ≥ <strong id="hmThresholdVal" class="num">−10,0</strong> %</span>
+                <input type="range" id="hmThreshold" min="-10" max="5" step="0.5" value="-10">
+              </label>
+              <span class="mono-meta num" id="hmLiveCount" aria-live="polite">33 de 33 meses</span>
+            </div>
+
+            <div id="chart07"></div>
+            <div class="hm-ramp" aria-label="Escala de retorno mensal">
+              <span class="micro-upper" style="margin-right:var(--s-1);">Escala mensal</span>
+              <span class="hm-ramp-item"><span class="hm-ramp-box" style="background:var(--vermilion);"></span>&lt; −2,0 %</span>
+              <span class="hm-ramp-item"><span class="hm-ramp-box" style="background:var(--vermilion-tint);"></span>−2,0 a &lt; 0 %</span>
+              <span class="hm-ramp-item"><span class="hm-ramp-box" style="background:var(--violet-100);"></span>0 a 0,9 %</span>
+              <span class="hm-ramp-item"><span class="hm-ramp-box" style="background:var(--violet-300);"></span>1,0 a 2,4 %</span>
+              <span class="hm-ramp-item"><span class="hm-ramp-box" style="background:var(--violet-500);"></span>2,5 a 3,9 %</span>
+              <span class="hm-ramp-item"><span class="hm-ramp-box" style="background:var(--violet-600);"></span>≥ 4,0 %</span>
+            </div>
+            <div id="cap07"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 08: CONSISTÊNCIA (WAFFLE) & AMPLITUDE POR ATIVO (DIVERGING BARS) -->
+    <section class="spread spread--spined" id="s08" aria-labelledby="h08" data-sec-index="7" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left">
+            <div class="controls-row">
+              <h3 class="h3-sub" style="font-size:15px;">Waffle de consistência (em 100 meses equivalentes)</h3>
+              <div class="seg-group" role="group" aria-label="Comparar consistência da Zen 5.4">
+                <button type="button" class="seg-btn" data-waffle-seg="Positivos" aria-pressed="true">Meses &gt; 0%</button>
+                <button type="button" class="seg-btn" data-waffle-seg="Vs CDI" aria-pressed="false">Acima do CDI</button>
+                <button type="button" class="seg-btn" data-waffle-seg="Vs Ibov" aria-pressed="false">Acima do Ibov</button>
+                <button type="button" class="seg-btn" data-waffle-seg="Vs Global50" aria-pressed="false">Acima 50/50</button>
+              </div>
+            </div>
+            <div class="waffle-stage">
+              <div id="chart08a"></div>
+              <div class="waffle-stat-box">
+                <div class="waffle-rot-frame" id="waffleRotStat"></div>
+                <p class="fig-text" id="waffleStatText" style="max-width:22ch;">% dos 33 meses encerraram no campo positivo para a Zen 5.4</p>
+              </div>
+            </div>
+            <div id="cap08a"></div>
+
+            <div class="controls-row" style="margin-top:var(--s-6);">
+              <h3 class="h3-sub" style="font-size:15px;">Amplitude mensal por instrumento (pior mês ← 0 → melhor mês)</h3>
+              <div class="seg-group" role="group" aria-label="Ordenar instrumentos por">
+                <button type="button" class="seg-btn" data-likert-sort="original" aria-pressed="true">Peso na carteira</button>
+                <button type="button" class="seg-btn" data-likert-sort="spread" aria-pressed="false">Menor oscilação</button>
+              </div>
+            </div>
+            <div id="chart08b"></div>
+            <div id="cap08b"></div>
+          </div>
+
+          <div class="page-right page-headline-first">
+            <p class="kicker">08 — Consistência e dispersão interna</p>
+            <h2 class="headline-h2" id="h08" tabindex="-1">
+              <span class="line"><span class="line-inner">Por que dosar cada</span></span>
+              <span class="line"><span class="line-inner">peso evita extremos</span></span>
+              <span class="line"><span class="line-inner">na carteira total.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="body-cols">
+              <div>
+                <p>O gráfico waffle traduz em 100 blocos a frequência de vitória mensal da Zen 5.4 — seja fechando no azul ou superando CDI, Ibovespa e a carteira 50/50.</p>
+                <p>Abaixo, as barras divergentes mostram o pior e o melhor retorno mensal de cada ativo individualmente entre Jan/2024 e Set/2026.</p>
+              </div>
+              <div>
+                <p>Fica visualmente claro por que <strong>HASH11</strong> (que oscilou de <strong>−24,9 %</strong> a <strong>+47,0 %</strong> em um único mês) ocupa apenas <strong>3 %</strong> da carteira, enquanto <strong>CDI</strong> e <strong>B5P211</strong> funcionam como âncora de estabilidade.</p>
+              </div>
+            </div>
+            <div class="evidence-summary-strip" id="consistencyStrip" aria-label="Resumo estatístico Zen 5.4">
+              <div>
+                <span class="h3-sub num" id="statWinMonths" style="font-size:36px;font-weight:400;display:block;margin-bottom:4px;">67 %</span>
+                <span class="fig-text">dos meses no positivo (22 de 33 meses)</span>
+              </div>
+              <div>
+                <span class="h3-sub num" id="statSharpeBox" style="font-size:36px;font-weight:400;display:block;margin-bottom:4px;">0,43</span>
+                <span class="fig-text">Sharpe preliminar sobre excesso do CDI</span>
+              </div>
+              <div>
+                <span class="h3-sub num" id="statRecBox" style="font-size:36px;font-weight:400;display:block;margin-bottom:4px;">6 m</span>
+                <span class="fig-text">tempo máximo de recuperação após pico</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 09: DISPERSÃO E BETA (OLS AO VIVO) -->
+    <section class="spread spread--spined" id="s09" aria-labelledby="h09" data-sec-index="8" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left">
+            <p class="kicker">09 — Sensibilidade e correlação (OLS)</p>
+            <h2 class="headline-h2" id="h09" tabindex="-1">
+              <span class="line"><span class="line-inner">Calcule o Beta e o</span></span>
+              <span class="line"><span class="line-inner">grau de aderência</span></span>
+              <span class="line"><span class="line-inner">ao mercado ao vivo.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="body-cols">
+              <div>
+                <p>Cada ponto representa um dos <strong>33 meses reais</strong> do backtest: no eixo horizontal está o retorno mensal do benchmark escolhido; no vertical, o retorno da <strong>Zen 5.4</strong>. A linha tracejada é a regressão linear (OLS) calculada no navegador.</p>
+                <p>Contra as ações globais (WRLD11), cada +1,0 % do índice movimenta a carteira em cerca de <strong data-slope>0,51 %</strong> — refletindo o peso de 47 % em bolsa global somado à proteção da renda fixa.</p>
+              </div>
+              <div>
+                <p>Troque o benchmark no seletor ao lado (<strong>WRLD11</strong>, <strong>Ibovespa</strong> ou <strong>Global 50/50</strong>), filtre por ano ou aplique o corte mínimo para observar em tempo real como o <strong>Beta</strong> e o <strong>R²</strong> se comportam.</p>
+              </div>
+            </div>
+            <div style="margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--rule);display:flex;gap:var(--s-6);flex-wrap:wrap;">
+              <div>
+                <span class="micro-upper" style="display:block;margin-bottom:4px;">Beta (Inclinação OLS)</span>
+                <span class="h3-sub num" id="scatterSlopeReadout">0,51x</span>
+              </div>
+              <div>
+                <span class="micro-upper" style="display:block;margin-bottom:4px;">Aderência (R²)</span>
+                <span class="h3-sub num" id="scatterR2Readout">R² 0,87</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-right">
+            <div class="controls-row">
+              <span class="h3-sub" id="scatterSubtitle" style="font-size:15px;">Retorno mensal Zen 5.4 (y) vs. Benchmark selecionado (x)</span>
+              <div class="seg-group" id="scatterBenchGroup" role="group" aria-label="Benchmark no eixo horizontal">
+                <button type="button" class="seg-btn" data-scatter-bench="wrld11" aria-pressed="true">WRLD11</button>
+                <button type="button" class="seg-btn" data-scatter-bench="ibov" aria-pressed="false">Ibovespa</button>
+                <button type="button" class="seg-btn" data-scatter-bench="global50" aria-pressed="false">Global 50/50</button>
+              </div>
+            </div>
+            <div class="controls-row">
+              <div class="seg-group" id="scatterSectors" role="group" aria-label="Filtrar observações por ano"></div>
+              <label class="range-control" for="scatterMinScore">
+                <span>Mín. Bench <strong id="scatterMinVal" class="num">−10</strong>%</span>
+                <input type="range" id="scatterMinScore" min="-10" max="5" step="1" value="-10">
+              </label>
+              <label class="check-control" for="scatterTrendToggle">
+                <input type="checkbox" id="scatterTrendToggle" checked>
+                <span>Linha OLS</span>
+              </label>
+            </div>
+            <div id="chart09"></div>
+            <div id="cap09"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 10: SÍNTESE DE CENÁRIOS & SÉRIE HISTÓRICA COMPLETA + CSV -->
+    <section class="spread spread--spined spread--compact" id="s10" aria-labelledby="h10" data-sec-index="9" data-reveal>
+      <div class="spread-container">
+        <div class="spread-grid">
+          <div class="page-left">
+            <h3 class="h3-sub" style="font-size:15px;margin-bottom:var(--s-4);">CAGR anualizado (%) no período alinhado (2024–2026)</h3>
+            <div id="chart10a"></div>
+            <div id="cap10a"></div>
+          </div>
+
+          <div class="page-right page-headline-first">
+            <p class="kicker">10 — Base completa e exportação</p>
+            <h2 class="headline-h2" id="h10" tabindex="-1">
+              <span class="line"><span class="line-inner">Consulte, filtre e</span></span>
+              <span class="line"><span class="line-inner">exporte a série mensal</span></span>
+              <span class="line"><span class="line-inner">completa em CSV.</span></span>
+            </h2>
+            <hr class="rule-strong">
+            <div class="body-cols">
+              <div>
+                <p>O painel de encerramento reúne o CAGR comparado das três referências centrais e uma tabela interativa com todos os <strong>33 meses alinhados</strong> do backtest preliminar.</p>
+              </div>
+              <div>
+                <p>Filtre por ano, busque por mês, clique nos cabeçalhos para ordenar pelo melhor ou pior desempenho e faça o download instantâneo da tabela filtrada em CSV.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-full" style="margin-top:var(--s-6);margin-bottom:calc(-1 * var(--s-6));padding-top:var(--s-6);padding-bottom:var(--s-6);border-top:1px solid var(--ink);background:var(--paper);position:relative;z-index:2;">
+            <div class="controls-row">
+              <div>
+                <h3 class="h3-sub">Série Histórica Mensal Completa (Retornos em % e Acumulado)</h3>
+                <p class="mono-meta num" id="marketCount" aria-live="polite" style="margin-top:4px;">Exibindo 33 de 33 meses</p>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center;">
+                <label class="sr-only" for="marketSearch">Buscar mês</label>
+                <input type="search" id="marketSearch" class="text-input" placeholder="Filtrar por mês (ex: 2025-03)…">
+                <div class="seg-group" role="group" aria-label="Filtrar série por ano" id="marketRegionFilters">
+                  <button type="button" class="seg-btn" data-mregion="All" aria-pressed="true">Todos</button>
+                  <button type="button" class="seg-btn" data-mregion="2024" aria-pressed="false">2024</button>
+                  <button type="button" class="seg-btn" data-mregion="2025" aria-pressed="false">2025</button>
+                  <button type="button" class="seg-btn" data-mregion="2026" aria-pressed="false">2026</button>
+                </div>
+                <button type="button" class="fig-table-btn" id="downloadCsvBtn">Baixar CSV ↓</button>
+              </div>
+            </div>
+            <div id="chart10b"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon" role="contentinfo">
+    <div class="spread-container">
+      <div class="colophon-grid">
+        <div class="colophon-col">
+          <span class="logotype logotype--footer">
+            <span class="logotype-brand">zen</span><span class="logotype-rule"></span><span class="logotype-title">Carteira Teórica</span><span class="logotype-year">5.4</span>
+          </span>
+          <span class="micro-upper" style="margin-top:var(--s-2);">Projeto de Pesquisa e Desenvolvimento</span>
+          <p id="colophonPeriodo">Período alinhado: 2024-01 a 2026-09 (33 meses completos, rebalanceamento mensal).</p>
+        </div>
+        <div class="colophon-col">
+          <span class="micro-upper">Metodologia &amp; Fontes</span>
+          <ul class="colophon-list" id="colophonMetodoList"></ul>
+        </div>
+        <div class="colophon-col">
+          <span class="micro-upper">Cuidados &amp; Limitações (Proxy)</span>
+          <ul class="colophon-list" id="colophonCuidadoList"></ul>
+        </div>
+        <div class="colophon-col">
+          <span class="micro-upper">Como Atualizar os Dados Depois</span>
+          <p><strong>1. Via arquivo no projeto:</strong> edite <span class="colophon-code">public/data/zen54_backtest.csv</span> no Excel/Bloco de Notas (adicionando novas linhas <span class="colophon-code">RETORNO_MENSAL</span> ou ajustando <span class="colophon-code">PESO_ALVO</span>). Todos os gráficos e KPIs recalculam automaticamente.</p>
+          <p><strong>2. Teste imediato no navegador:</strong> abra o <strong>Painel</strong> no topo direito e clique em <em>Carregar CSV local</em> para visualizar um novo arquivo na hora.</p>
+        </div>
+      </div>
+
+      <div class="colophon-bottom">
+        <span class="mono-meta" id="colophonFontesLinks">Fontes: ETFs Brasil (WRLD11, B5P211, B5MB11, FIXA11, BSHV39, Trend Euro, HASH11, BOVA11). Material de estudo — não constitui recomendação de investimento.</span>
+        <a href="#s01" class="back-top">Voltar ao topo ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="themePanel" class="theme-panel" aria-labelledby="themePanelTitle">
+    <div class="theme-panel-inner" id="themePanelInner">
+      <div class="theme-panel-band">
+        <div class="theme-panel-band-left">
+          <span class="band-folio num">PC</span>
+          <h2 id="themePanelTitle">Painel de controle</h2>
+        </div>
+        <button type="button" class="band-btn" id="themePanelClose">
+          <span>Fechar</span>
+          <span class="band-close-x" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="theme-panel-body">
+        <p class="mono-meta">Tema visual</p>
+        <p class="theme-panel-lede">Recolore todas as páginas, gráficos e tabelas mantendo contraste WCAG AA.</p>
+        <fieldset class="theme-list" id="themeList">
+          <legend class="sr-only">Tema visual</legend>
+        </fieldset>
+
+        <div class="panel-data-box">
+          <p class="mono-meta">Dados do backtest (CSV)</p>
+          <p class="theme-panel-lede" style="margin-bottom:0;">Carregue uma versão atualizada de <span class="colophon-code">zen54_backtest.csv</span> para recalcular todo o painel na hora.</p>
+          <div class="panel-data-actions">
+            <label class="fig-table-btn" style="display:inline-flex;align-items:center;" for="csvUploadInput">
+              Carregar CSV local
+              <input type="file" id="csvUploadInput" accept=".csv,text/csv" class="sr-only">
+            </label>
+            <button type="button" class="seg-btn" id="csvResetBtn" disabled>Restaurar padrão</button>
+          </div>
+          <p class="mono-meta" id="csvSourceStatus">Fonte ativa: zen54_backtest.csv (33 meses)</p>
+        </div>
+      </div>
+
+      <div class="theme-panel-footer">
+        <button type="button" class="seg-btn" id="themeReset">Restaurar tema padrão</button>
+        <span class="mono-meta" id="themeStorageNote">Salvo neste dispositivo</span>
+      </div>
+      <p id="themeStatus" role="status" aria-live="polite" class="sr-only"></p>
+    </div>
+  </dialog>
+
+  <div role="tooltip" id="tt" hidden>
+    <div class="tt-cat" id="ttCat"></div>
+    <div class="tt-val" id="ttVal"></div>
+    <div class="tt-sub" id="ttSub"></div>
+  </div>
+  <div class="sr-only" id="liveRegion" aria-live="polite"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
